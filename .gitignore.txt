@@ -1,0 +1,3 @@
+CPS\CPS\bin
+CPS\CPS\obj
+CPS\.vs
