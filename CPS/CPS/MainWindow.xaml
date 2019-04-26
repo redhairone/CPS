@@ -5,8 +5,27 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CPS"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
+        Title="MainWindow" Height="450" Width="800" MinWidth="800" MinHeight="450">
+    <Grid Height="auto" Width="auto">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="7*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="68*"/>
+            <RowDefinition Height="237*"/>
+            <RowDefinition Height="76*"/>
+            <RowDefinition Height="38*"/>
+        </Grid.RowDefinitions>
+        <ComboBox Grid.Column="0" Grid.Row="0" Margin="10,36,10,10" Height="22" VerticalAlignment="Top"/>
+        <TabControl Grid.Column="1" Margin="0" Grid.RowSpan="4">
+            <TabItem Header="TabItem">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+            <TabItem Header="TabItem">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+        </TabControl>
+        <Label Content="Wybierz wariant sygnału:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="26" Width="218"/>
     </Grid>
 </Window>
