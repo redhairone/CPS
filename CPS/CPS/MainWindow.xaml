@@ -11,13 +11,10 @@
             <ColumnDefinition Width="3*"/>
             <ColumnDefinition Width="7*"/>
         </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="68*"/>
-            <RowDefinition Height="237*"/>
-            <RowDefinition Height="76*"/>
-            <RowDefinition Height="38*"/>
-        </Grid.RowDefinitions>
-        <ComboBox Grid.Column="0" Grid.Row="0" Margin="10,36,10,10" Height="22" VerticalAlignment="Top"/>
+
+        <Label Content="Wybierz wariant sygnału:" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Height="26" Width="218"/>
+        <ComboBox Grid.Column="0" Grid.Row="0" Margin="10,26,10,10" Height="22" VerticalAlignment="Top"/>
+
         <TabControl Grid.Column="1" Margin="0" Grid.RowSpan="4">
             <TabItem Header="TabItem">
                 <Grid Background="#FFE5E5E5"/>
@@ -26,6 +23,100 @@
                 <Grid Background="#FFE5E5E5"/>
             </TabItem>
         </TabControl>
-        <Label Content="Wybierz wariant sygnału:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="26" Width="218"/>
+
+        <ScrollViewer Margin="0,53,0,0">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Expander Header="Parametry" IsExpanded="false">
+                <StackPanel>
+                    <Label Content="Ilość próbek:"/>
+                    <TextBox Height="18" Margin="10,0"/>
+
+                    <Label Content="Czas trwania sygnału:"/>
+                    <TextBox Height="18" Margin="10,0"/>
+
+                    <Label Content="Minimum:"/>
+                    <TextBox Height="18" Margin="10,0"/>
+
+                    <Label Content="Maksimum:"/>
+                    <TextBox Height="18" Margin="10,0"/>
+
+                    <Label Content="Średnia:"/>
+                    <TextBox Height="18" Margin="10,0"/>
+
+                    <Label Content="Odchylenie:"/>
+                    <TextBox Height="18" Margin="10,0"/>
+
+                    <Label Content="Amplituda:"/>
+                    <TextBox Height="18" Margin="10,0"/>
+
+                    <Label Content="Okres:"/>
+                    <TextBox Height="18" Margin="10,0"/>
+
+                    <Label Content="Przesunięcie:"/>
+                    <TextBox Height="18" Margin="10,0"/>
+
+                    <Label Content="Okres podstawowy:"/>
+                    <TextBox Height="18" Margin="10,0"/>
+
+                    <Label Content="Współczynnik wypełnienia:"/>
+                    <TextBox Height="18" Margin="10,0"/>
+
+                    <Label Content="Czas skoku:"/>
+                    <TextBox Height="18" Margin="10,0"/>
+
+                    <Label Content="Szansa impulsu:"/>
+                    <TextBox Height="18" Margin="10,0"/>
+                </StackPanel>
+            </Expander>
+                <Expander Grid.Row="1" >
+                    <StackPanel>
+                        <Label Content="Ilość próbek:"/>
+                        <TextBox Height="18" Margin="10,0"/>
+
+                        <Label Content="Czas trwania sygnału:"/>
+                        <TextBox Height="18" Margin="10,0"/>
+
+                        <Label Content="Minimum:"/>
+                        <TextBox Height="18" Margin="10,0"/>
+
+                        <Label Content="Maksimum:"/>
+                        <TextBox Height="18" Margin="10,0"/>
+
+                        <Label Content="Średnia:"/>
+                        <TextBox Height="18" Margin="10,0"/>
+
+                        <Label Content="Odchylenie:"/>
+                        <TextBox Height="18" Margin="10,0"/>
+
+                        <Label Content="Amplituda:"/>
+                        <TextBox Height="18" Margin="10,0"/>
+
+                        <Label Content="Okres:"/>
+                        <TextBox Height="18" Margin="10,0"/>
+
+                        <Label Content="Przesunięcie:"/>
+                        <TextBox Height="18" Margin="10,0"/>
+
+                        <Label Content="Okres podstawowy:"/>
+                        <TextBox Height="18" Margin="10,0"/>
+
+                        <Label Content="Współczynnik wypełnienia:"/>
+                        <TextBox Height="18" Margin="10,0"/>
+
+                        <Label Content="Czas skoku:"/>
+                        <TextBox Height="18" Margin="10,0"/>
+
+                        <Label Content="Szansa impulsu:"/>
+                        <TextBox Height="18" Margin="10,0"/>
+                    </StackPanel>
+                </Expander>
+            </Grid>
+        </ScrollViewer>
     </Grid>
 </Window>
