@@ -22,6 +22,7 @@ namespace CPS
     {
         public MainWindow()
         {
+            DataContext = new TheView.View();
             InitializeComponent();
         }
     }

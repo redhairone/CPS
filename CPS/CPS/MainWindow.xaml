@@ -13,7 +13,19 @@
         </Grid.ColumnDefinitions>
 
         <Label Content="Wybierz wariant sygnału:" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Height="26" Width="218"/>
-        <ComboBox Grid.Column="0" Grid.Row="0" Margin="10,26,10,10" Height="22" VerticalAlignment="Top"/>
+        <ComboBox Grid.Column="0" Grid.Row="0" Margin="10,26,10,10" Height="22" VerticalAlignment="Top" SelectedIndex="{Binding SelectedSignal, UpdateSourceTrigger=PropertyChanged}">
+            <ComboBoxItem Content="(S1) Szum o rozkładzie jednostajnym."/>
+            <ComboBoxItem Content="(S2) Szum gaussowski."/>
+            <ComboBoxItem Content="(S3) Sygnał sinusoidalny."/>
+            <ComboBoxItem Content="(S4) Sygnał sinusoidalny wyprostowany jednopołówkowo."/>
+            <ComboBoxItem Content="(S5) Sygnał sinusoidalny wyprostowany dwupołówkowo."/>
+            <ComboBoxItem Content="(S6) Sygnał prostokątny."/>
+            <ComboBoxItem Content="(S7) Sygnał prostokątny symetryczny."/>
+            <ComboBoxItem Content="(S8) Sygnał trójkątny."/>
+            <ComboBoxItem Content="(S9) Skok jednostkowy."/>
+            <ComboBoxItem Content="(S10) Impuls jednostkowy."/>
+            <ComboBoxItem Content="(S11) Szum impulsowy."/>
+        </ComboBox>
 
         <TabControl Grid.Column="1" Margin="0" Grid.RowSpan="4">
             <TabItem Header="TabItem">
@@ -24,56 +36,56 @@
             </TabItem>
         </TabControl>
 
-        <ScrollViewer Margin="0,53,0,0">
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
+        <ScrollViewer Margin="0,53,0,40">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-            <Expander Header="Parametry" IsExpanded="false">
-                <StackPanel>
-                    <Label Content="Ilość próbek:"/>
-                    <TextBox Height="18" Margin="10,0"/>
+                <Expander Header="Parametry" IsExpanded="true">
+                    <StackPanel>
+                        <Label Content="Ilość próbek:"/>
+                        <TextBox Height="18" Margin="10,0"/>
 
-                    <Label Content="Czas trwania sygnału:"/>
-                    <TextBox Height="18" Margin="10,0"/>
+                        <Label Content="Czas trwania sygnału:"/>
+                        <TextBox Height="18" Margin="10,0"/>
 
-                    <Label Content="Minimum:"/>
-                    <TextBox Height="18" Margin="10,0"/>
+                        <Label Content="Minimum:"/>
+                        <TextBox Height="18" Margin="10,0"/>
 
-                    <Label Content="Maksimum:"/>
-                    <TextBox Height="18" Margin="10,0"/>
+                        <Label Content="Maksimum:"/>
+                        <TextBox Height="18" Margin="10,0"/>
 
-                    <Label Content="Średnia:"/>
-                    <TextBox Height="18" Margin="10,0"/>
+                        <Label Content="Średnia:"/>
+                        <TextBox Height="18" Margin="10,0"/>
 
-                    <Label Content="Odchylenie:"/>
-                    <TextBox Height="18" Margin="10,0"/>
+                        <Label Content="Odchylenie:"/>
+                        <TextBox Height="18" Margin="10,0"/>
 
-                    <Label Content="Amplituda:"/>
-                    <TextBox Height="18" Margin="10,0"/>
+                        <Label Content="Amplituda:"/>
+                        <TextBox Height="18" Margin="10,0"/>
 
-                    <Label Content="Okres:"/>
-                    <TextBox Height="18" Margin="10,0"/>
+                        <Label Content="Okres:"/>
+                        <TextBox Height="18" Margin="10,0"/>
 
-                    <Label Content="Przesunięcie:"/>
-                    <TextBox Height="18" Margin="10,0"/>
+                        <Label Content="Przesunięcie:"/>
+                        <TextBox Height="18" Margin="10,0"/>
 
-                    <Label Content="Okres podstawowy:"/>
-                    <TextBox Height="18" Margin="10,0"/>
+                        <Label Content="Okres podstawowy:"/>
+                        <TextBox Height="18" Margin="10,0"/>
 
-                    <Label Content="Współczynnik wypełnienia:"/>
-                    <TextBox Height="18" Margin="10,0"/>
+                        <Label Content="Współczynnik wypełnienia:"/>
+                        <TextBox Height="18" Margin="10,0"/>
 
-                    <Label Content="Czas skoku:"/>
-                    <TextBox Height="18" Margin="10,0"/>
+                        <Label Content="Czas skoku:"/>
+                        <TextBox Height="18" Margin="10,0"/>
 
-                    <Label Content="Szansa impulsu:"/>
-                    <TextBox Height="18" Margin="10,0"/>
-                </StackPanel>
-            </Expander>
+                        <Label Content="Szansa impulsu:"/>
+                        <TextBox Height="18" Margin="10,0"/>
+                    </StackPanel>
+                </Expander>
                 <Expander Grid.Row="1" >
                     <StackPanel>
                         <Label Content="Ilość próbek:"/>
@@ -118,5 +130,7 @@
                 </Expander>
             </Grid>
         </ScrollViewer>
+
+        <Button Content="Generate" HorizontalAlignment="Left" Margin="10,384,0,0" VerticalAlignment="Top" Width="218" Height="25" Command="{Binding GenerateButton}"/>
     </Grid>
 </Window>
