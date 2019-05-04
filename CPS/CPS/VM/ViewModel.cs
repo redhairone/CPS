@@ -4,7 +4,7 @@ using System.Windows.Input;
 
 namespace CPS.VM
 {
-    class View
+    class ViewModel
     {
 
         private int selectedSignal;
@@ -62,7 +62,7 @@ namespace CPS.VM
             }
         }
 
-        public View()
+        public ViewModel()
         {
             SignalParametersCollection = new ObservableCollection<Control>();
 
