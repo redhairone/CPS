@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         xmlns:local="clr-namespace:CPS"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800" MinWidth="800" MinHeight="450">
@@ -29,7 +30,9 @@
 
         <TabControl Grid.Column="1" Margin="0" Grid.RowSpan="4">
             <TabItem Header="TabItem">
-                <Grid Background="#FFE5E5E5"/>
+                <Grid>
+                    <lvc:CartesianChart Series="{Binding NormalChartSeries}" LegendLocation="Bottom"/>
+                </Grid>
             </TabItem>
             <TabItem Header="TabItem">
                 <Grid Background="#FFE5E5E5"/>
@@ -51,49 +54,12 @@
                 </Expander>
                 <Expander Grid.Row="1" >
                     <StackPanel>
-                        <Label Content="Ilość próbek:"/>
-                        <TextBox Height="18" Margin="10,0"/>
-
-                        <Label Content="Czas trwania sygnału:"/>
-                        <TextBox Height="18" Margin="10,0"/>
-
-                        <Label Content="Minimum:"/>
-                        <TextBox Height="18" Margin="10,0"/>
-
-                        <Label Content="Maksimum:"/>
-                        <TextBox Height="18" Margin="10,0"/>
-
-                        <Label Content="Średnia:"/>
-                        <TextBox Height="18" Margin="10,0"/>
-
-                        <Label Content="Odchylenie:"/>
-                        <TextBox Height="18" Margin="10,0"/>
-
-                        <Label Content="Amplituda:"/>
-                        <TextBox Height="18" Margin="10,0"/>
-
-                        <Label Content="Okres:"/>
-                        <TextBox Height="18" Margin="10,0"/>
-
-                        <Label Content="Przesunięcie:"/>
-                        <TextBox Height="18" Margin="10,0"/>
-
-                        <Label Content="Okres podstawowy:"/>
-                        <TextBox Height="18" Margin="10,0"/>
-
-                        <Label Content="Współczynnik wypełnienia:"/>
-                        <TextBox Height="18" Margin="10,0"/>
-
-                        <Label Content="Czas skoku:"/>
-                        <TextBox Height="18" Margin="10,0"/>
-
-                        <Label Content="Szansa impulsu:"/>
-                        <TextBox Height="18" Margin="10,0"/>
+                        
                     </StackPanel>
                 </Expander>
             </Grid>
         </ScrollViewer>
 
-        <Button Content="Generate" HorizontalAlignment="Left" Margin="10,384,0,0" VerticalAlignment="Top" Width="218" Height="25" Command="{Binding GenerateButtonPressed}"/>
+        <Button Content="Generate" Margin="5,0,5,7.5" VerticalAlignment="Bottom" Width="Auto" Height="25" Command="{Binding GenerateButtonPressed}"/>
     </Grid>
 </Window>

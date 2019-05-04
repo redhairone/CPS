@@ -1,26 +1,30 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Controls;
 using System.Windows.Input;
+using CPS.M;
+using LiveCharts;
+using LiveCharts.Defaults;
+using LiveCharts.Wpf;
 
 namespace CPS.VM
 {
     class ViewModel
     {
-
+        private Model model = new Model();
         private int selectedSignal;
 
         #region THE_LABELS_AND_THE_TEXTBOXES
         private readonly Label SamplesAmountLabel = new Label { Content = "Ilość próbek:" };
-        private readonly CustomTextBox<int> SamplesAmountTextBox = new CustomTextBox<int>();
+        private readonly CustomTextBox<int> SamplesAmountTextBox = new CustomTextBox<int>(100);
 
         private readonly Label TimeDurationLabel = new Label { Content = "Czas trwania:" };
-        private readonly CustomTextBox<double> TimeDurationTextBox = new CustomTextBox<double>();
+        private readonly CustomTextBox<double> TimeDurationTextBox = new CustomTextBox<double>(10);
 
         private readonly Label MinimumLabel = new Label { Content = "Minimum:" };
-        private readonly CustomTextBox<double> MinimumTextBox = new CustomTextBox<double>();
+        private readonly CustomTextBox<double> MinimumTextBox = new CustomTextBox<double>(-5);
 
         private readonly Label MaximumLabel = new Label { Content = "Maksimum" };
-        private readonly CustomTextBox<double> MaximumTextBox = new CustomTextBox<double>();
+        private readonly CustomTextBox<double> MaximumTextBox = new CustomTextBox<double>(5);
 
         private readonly Label MeanLabel = new Label { Content = "Średnia:" };
         private readonly CustomTextBox<double> MeanTextBox = new CustomTextBox<double>();
@@ -51,6 +55,8 @@ namespace CPS.VM
         #endregion
 
         public ICommand GenerateButtonPressed { get; }
+
+        public SeriesCollection NormalChartSeries { get; set; }
         public ObservableCollection<Control> SignalParametersCollection { get; set; }
         public int SelectedSignal
         {
@@ -65,6 +71,14 @@ namespace CPS.VM
         public ViewModel()
         {
             SignalParametersCollection = new ObservableCollection<Control>();
+            NormalChartSeries = new SeriesCollection
+            {
+                new LineSeries
+                {
+                    Title = "Wykres wybranego sygnału",
+                    PointGeometry = null
+                }
+            };
 
             GenerateButtonPressed = new RelayCommand(Generate);
 
@@ -155,7 +169,42 @@ namespace CPS.VM
 
         public void Generate()
         {
-            System.Console.WriteLine(SamplesAmountTextBox.GetValue());
+            switch (SelectedSignal)
+            {
+                case 0:
+                    NormalChartSeries[0].Values = model.GetUniformDistributionNoise(SamplesAmountTextBox.GetValue(), TimeDurationTextBox.GetValue(), MinimumTextBox.GetValue(), MaximumTextBox.GetValue());
+                    break;
+                case 1:
+                    NormalChartSeries[0].Values = model.GetGaussianNoise(SamplesAmountTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), MeanTextBox.GetValue(), VarianceTextBox.GetValue());
+                    break;
+                case 2:
+                    NormalChartSeries[0].Values = model.GetSinSignal(SamplesAmountTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), FrequencyTextBox.GetValue(), StartTimetextBox.GetValue());
+                    break;
+                case 3:
+                    NormalChartSeries[0].Values = model.GetSinAbsSignal(SamplesAmountTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), FrequencyTextBox.GetValue(), StartTimetextBox.GetValue());
+                    break;
+                case 4:
+                    NormalChartSeries[0].Values = model.GetSinDoubleAbsSignal(SamplesAmountTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), FrequencyTextBox.GetValue(), StartTimetextBox.GetValue());
+                    break;
+                case 5:
+                    NormalChartSeries[0].Values = model.GetRectangularSignal(SamplesAmountTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), PeriodTextBox.GetValue(), StartTimetextBox.GetValue(), DutyCycleTextBox.GetValue());
+                    break;
+                case 6:
+                    NormalChartSeries[0].Values = model.GetSymmetricRectangularSignal(SamplesAmountTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), PeriodTextBox.GetValue(), StartTimetextBox.GetValue(), DutyCycleTextBox.GetValue());
+                    break;
+                case 7:
+                    NormalChartSeries[0].Values = model.GetTriangularSignal(SamplesAmountTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), PeriodTextBox.GetValue(), StartTimetextBox.GetValue(), DutyCycleTextBox.GetValue());
+                    break;
+                case 8:
+                    NormalChartSeries[0].Values = model.GetJumpSignal(SamplesAmountTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), JumpTimeTextBox.GetValue(), StartTimetextBox.GetValue());
+                    break;
+                case 9:
+                    NormalChartSeries[0].Values = model.GetSingleImpulseSignal(SamplesAmountTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), JumpTimeTextBox.GetValue(), StartTimetextBox.GetValue());
+                    break;
+                case 10:
+                    NormalChartSeries[0].Values = model.GetImpulseNoise(SamplesAmountTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), ImpulseProbabilityTextBox.GetValue());
+                    break;
+            }
         }
     }
 }
