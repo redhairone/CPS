@@ -20,24 +20,56 @@ namespace CPS.M
             return result;
         }
 
-        internal IChartValues GetGaussianNoise(int v1, double v2, double v3, double v4, double v5)
+        internal IChartValues GetGaussianNoise(int samplesAmount, double timeDuration, double amplitude, double mean, double variance)
         {
-            throw new NotImplementedException();
+            double[] xValues = Logic.GetTimeValues(samplesAmount, timeDuration);
+            ChartValues<ObservablePoint> result = new ChartValues<ObservablePoint>();
+
+            for (int i = 0; i < xValues.Length; i++)
+            {
+                result.Add(new ObservablePoint { X = xValues[i], Y = Logic.GetGaussianNoiseValue(amplitude, mean, variance) });
+            }
+
+            return result;
         }
 
-        internal IChartValues GetSinSignal(int v1, double v2, double v3, double v4, double v5)
+        internal IChartValues GetSinSignal(int samplesAmount, double timeDuration, double amplitude, double frequency, double startTime)
         {
-            throw new NotImplementedException();
+            double[] xValues = Logic.GetTimeValues(samplesAmount, timeDuration, startTime);
+            ChartValues<ObservablePoint> result = new ChartValues<ObservablePoint>();
+
+            for (int i = 0; i < xValues.Length; i++)
+            {
+                result.Add(new ObservablePoint { X = xValues[i], Y = Logic.GetSinValue(xValues[i], amplitude, frequency) });
+            }
+
+            return result;
         }
 
-        internal IChartValues GetSinAbsSignal(int v1, double v2, double v3, double v4, double v5)
+        internal IChartValues GetSinAbsSignal(int samplesAmount, double timeDuration, double amplitude, double frequency, double startTime)
         {
-            throw new NotImplementedException();
+            double[] xValues = Logic.GetTimeValues(samplesAmount, timeDuration, startTime);
+            ChartValues<ObservablePoint> result = new ChartValues<ObservablePoint>();
+
+            for (int i = 0; i < xValues.Length; i++)
+            {
+                result.Add(new ObservablePoint { X = xValues[i], Y = Logic.GetSinAbsValue(xValues[i], amplitude, frequency) });
+            }
+
+            return result;
         }
 
-        internal IChartValues GetSinDoubleAbsSignal(int v1, double v2, double v3, double v4, double v5)
+        internal IChartValues GetSinDoubleAbsSignal(int samplesAmount, double timeDuration, double amplitude, double frequency, double startTime)
         {
-            throw new NotImplementedException();
+            double[] xValues = Logic.GetTimeValues(samplesAmount, timeDuration, startTime);
+            ChartValues<ObservablePoint> result = new ChartValues<ObservablePoint>();
+
+            for (int i = 0; i < xValues.Length; i++)
+            {
+                result.Add(new ObservablePoint { X = xValues[i], Y = Logic.GetSinDoubleAbsValue(xValues[i], amplitude, frequency) });
+            }
+
+            return result;
         }
 
         internal IChartValues GetRectangularSignal(int v1, double v2, double v3, double v4, double v5, double v6)

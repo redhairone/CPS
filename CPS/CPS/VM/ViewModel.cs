@@ -33,13 +33,13 @@ namespace CPS.VM
         private readonly CustomTextBox<double> VarianceTextBox = new CustomTextBox<double>();
 
         private readonly Label AmplitudeLabel = new Label { Content = "Amplituda:" };
-        private readonly CustomTextBox<double> AmplitudeTextBox = new CustomTextBox<double>();
+        private readonly CustomTextBox<double> AmplitudeTextBox = new CustomTextBox<double>(2);
 
         private readonly Label FrequencyLabel = new Label { Content = "Okres:" };
-        private readonly CustomTextBox<double> FrequencyTextBox = new CustomTextBox<double>();
+        private readonly CustomTextBox<double> FrequencyTextBox = new CustomTextBox<double>(5);
 
         private readonly Label StartTimeLabel = new Label { Content = "Przesunięcie:" };
-        private readonly CustomTextBox<double> StartTimetextBox = new CustomTextBox<double>();
+        private readonly CustomTextBox<double> StartTimetextBox = new CustomTextBox<double>(0);
 
         private readonly Label PeriodLabel = new Label { Content = "Okres podstawowy:" };
         private readonly CustomTextBox<double> PeriodTextBox = new CustomTextBox<double>();
@@ -76,6 +76,7 @@ namespace CPS.VM
                 new LineSeries
                 {
                     Title = "Wykres wybranego sygnału",
+                    Foreground = null,
                     PointGeometry = null
                 }
             };
