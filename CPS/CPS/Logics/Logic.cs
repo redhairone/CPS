@@ -10,10 +10,11 @@ namespace CPS.Logics
     {
         private static Random Random = new Random();
 
-        public static double[] GetTimeValues(int samplesAmount, double timeDuration, double startTime = 0)
+        public static double[] GetTimeValues(int signalFrequency, double timeDuration, double startTime = 0)
         {
-            double[] result = new double[samplesAmount+1];
-            double step = timeDuration / samplesAmount;
+            Console.WriteLine((int)(timeDuration / (signalFrequency / 1000.0) + 1.0));
+            double[] result = new double[(int)(timeDuration/(signalFrequency/1000.0) + 1.0)];
+            double step = signalFrequency / 1000.0;
 
             result[0] = startTime;
 
@@ -48,6 +49,66 @@ namespace CPS.Logics
         internal static double GetSinDoubleAbsValue(double time, double amplitude, double frequency)
         {
             return Math.Abs(Logic.GetSinValue(time, amplitude, frequency));
+        }
+
+        internal static double GetRectangularSignalValue(double time, double amplitude, double period, double startTime, double dutyCycle)
+        {
+            int k = (int)((time / period) - (startTime / period));
+            if ((time >= k * period + startTime) && (time < dutyCycle * period + k * period + startTime))
+            {
+                return amplitude;
+            }
+            else return 0;
+        }
+
+        internal static double GetSymmetricRectangularSignalValue(double time, double amplitude, double period, double startTime, double dutyCycle)
+        {
+            int k = (int)((time / period) - (startTime / period));
+            if ((time >= k * period + startTime) && (time < dutyCycle * period + k * period + startTime))
+            {
+                return amplitude;
+            }
+            else return -amplitude;
+        }
+
+        internal static double GetTriangularSignalValue(double time, double amplitude, double period, double startTime, double dutyCycle)
+        {
+            int k = (int)((time / period) - (startTime / period));
+            if(time >= k * period  + startTime && time < dutyCycle * period + k * period + startTime)
+            {
+                return (amplitude / (dutyCycle * period)) * (time - k * period - startTime);
+            } else
+            {
+                return -amplitude / (period * (1 - dutyCycle)) * (time - k * period - startTime) + (amplitude / (1 - dutyCycle));
+            }
+        }
+
+        internal static double GetJumpSignalValue(double time, double amplitude, double jumpTime, double startTime)
+        {
+            if(time > jumpTime)
+            {
+                return amplitude;
+            }
+            else if (time < jumpTime)
+            {
+                return 0;
+            }
+            else
+            {
+                return 0.5 * amplitude;
+            }
+        }
+
+        internal static double GetSingleImpulseSignalValue(double time, double amplitude, double jumpTime, double startTime)
+        {
+            if (Math.Abs(time - jumpTime) < 0.0001) return amplitude;
+            else return 0;
+        }
+
+        internal static double GetImpulseNoiseValue(double v, double amplitude, double impulsProbability)
+        {
+            if (impulsProbability > Random.NextDouble()) return amplitude;
+            else return 0;
         }
     }
 }

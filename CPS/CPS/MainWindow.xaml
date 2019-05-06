@@ -29,12 +29,12 @@
         </ComboBox>
 
         <TabControl Grid.Column="1" Margin="0" Grid.RowSpan="4">
-            <TabItem Header="TabItem">
+            <TabItem Header="Wykres funkcji">
                 <Grid>
                     <lvc:CartesianChart Series="{Binding NormalChartSeries}" LegendLocation="Bottom"/>
                 </Grid>
             </TabItem>
-            <TabItem Header="TabItem">
+            <TabItem Header="Histogram">
                 <Grid Background="#FFE5E5E5"/>
             </TabItem>
         </TabControl>
@@ -52,9 +52,9 @@
                         <ItemsControl ItemsSource="{Binding Path= SignalParametersCollection}"/>
                     </StackPanel>
                 </Expander>
-                <Expander Grid.Row="1" >
+                <Expander Header="Parametry dodatkowe:" Grid.Row="1" >
                     <StackPanel>
-                        
+                        <ItemsControl ItemsSource="{Binding Path=AdditionalParametersCollection}"/>
                     </StackPanel>
                 </Expander>
             </Grid>

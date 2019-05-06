@@ -7,9 +7,9 @@ namespace CPS.M
 {
     class Model
     {
-        internal IChartValues GetUniformDistributionNoise(int samplesAmount, double timeDuration, double minimum, double maximum)
+        internal IChartValues GetUniformDistributionNoise(int signalFrequency, double timeDuration, double minimum, double maximum)
         {
-            double[] xValues = Logic.GetTimeValues(samplesAmount, timeDuration);
+            double[] xValues = Logic.GetTimeValues(signalFrequency, timeDuration);
             ChartValues<ObservablePoint> result = new ChartValues<ObservablePoint>();
 
             for (int i = 0; i < xValues.Length; i++)
@@ -20,9 +20,9 @@ namespace CPS.M
             return result;
         }
 
-        internal IChartValues GetGaussianNoise(int samplesAmount, double timeDuration, double amplitude, double mean, double variance)
+        internal IChartValues GetGaussianNoise(int signalFrequency, double timeDuration, double amplitude, double mean, double variance)
         {
-            double[] xValues = Logic.GetTimeValues(samplesAmount, timeDuration);
+            double[] xValues = Logic.GetTimeValues(signalFrequency, timeDuration);
             ChartValues<ObservablePoint> result = new ChartValues<ObservablePoint>();
 
             for (int i = 0; i < xValues.Length; i++)
@@ -33,9 +33,9 @@ namespace CPS.M
             return result;
         }
 
-        internal IChartValues GetSinSignal(int samplesAmount, double timeDuration, double amplitude, double frequency, double startTime)
+        internal IChartValues GetSinSignal(int signalFrequency, double timeDuration, double amplitude, double frequency, double startTime)
         {
-            double[] xValues = Logic.GetTimeValues(samplesAmount, timeDuration, startTime);
+            double[] xValues = Logic.GetTimeValues(signalFrequency, timeDuration, startTime);
             ChartValues<ObservablePoint> result = new ChartValues<ObservablePoint>();
 
             for (int i = 0; i < xValues.Length; i++)
@@ -46,9 +46,9 @@ namespace CPS.M
             return result;
         }
 
-        internal IChartValues GetSinAbsSignal(int samplesAmount, double timeDuration, double amplitude, double frequency, double startTime)
+        internal IChartValues GetSinAbsSignal(int signalFrequency, double timeDuration, double amplitude, double frequency, double startTime)
         {
-            double[] xValues = Logic.GetTimeValues(samplesAmount, timeDuration, startTime);
+            double[] xValues = Logic.GetTimeValues(signalFrequency, timeDuration, startTime);
             ChartValues<ObservablePoint> result = new ChartValues<ObservablePoint>();
 
             for (int i = 0; i < xValues.Length; i++)
@@ -59,9 +59,9 @@ namespace CPS.M
             return result;
         }
 
-        internal IChartValues GetSinDoubleAbsSignal(int samplesAmount, double timeDuration, double amplitude, double frequency, double startTime)
+        internal IChartValues GetSinDoubleAbsSignal(int signalFrequency, double timeDuration, double amplitude, double frequency, double startTime)
         {
-            double[] xValues = Logic.GetTimeValues(samplesAmount, timeDuration, startTime);
+            double[] xValues = Logic.GetTimeValues(signalFrequency, timeDuration, startTime);
             ChartValues<ObservablePoint> result = new ChartValues<ObservablePoint>();
 
             for (int i = 0; i < xValues.Length; i++)
@@ -72,34 +72,82 @@ namespace CPS.M
             return result;
         }
 
-        internal IChartValues GetRectangularSignal(int v1, double v2, double v3, double v4, double v5, double v6)
+        internal IChartValues GetRectangularSignal(int signalFrequency, double timeDuration, double amplitude, double period, double startTime, double dutyCycle)
         {
-            throw new NotImplementedException();
+            double[] xValues = Logic.GetTimeValues(signalFrequency, timeDuration, startTime);
+            ChartValues<ObservablePoint> result = new ChartValues<ObservablePoint>();
+
+            for (int i = 0; i < xValues.Length; i++)
+            {
+                result.Add(new ObservablePoint { X = xValues[i], Y = Logic.GetRectangularSignalValue(xValues[i], amplitude, period, startTime, dutyCycle) });
+            }
+
+            return result;
         }
 
-        internal IChartValues GetSymmetricRectangularSignal(int v1, double v2, double v3, double v4, double v5, double v6)
+        internal IChartValues GetSymmetricRectangularSignal(int signalFrequency, double timeDuration, double amplitude, double period, double startTime, double dutyCycle)
         {
-            throw new NotImplementedException();
+            double[] xValues = Logic.GetTimeValues(signalFrequency, timeDuration, startTime);
+            ChartValues<ObservablePoint> result = new ChartValues<ObservablePoint>();
+
+            for (int i = 0; i < xValues.Length; i++)
+            {
+                result.Add(new ObservablePoint { X = xValues[i], Y = Logic.GetSymmetricRectangularSignalValue(xValues[i], amplitude, period, startTime, dutyCycle) });
+            }
+
+            return result;
         }
 
-        internal IChartValues GetTriangularSignal(int v1, double v2, double v3, double v4, double v5, double v6)
+        internal IChartValues GetTriangularSignal(int signalFrequency, double timeDuration, double amplitude, double period, double startTime, double dutyCycle)
         {
-            throw new NotImplementedException();
+            double[] xValues = Logic.GetTimeValues(signalFrequency, timeDuration, startTime);
+            ChartValues<ObservablePoint> result = new ChartValues<ObservablePoint>();
+
+            for (int i = 0; i < xValues.Length; i++)
+            {
+                result.Add(new ObservablePoint { X = xValues[i], Y = Logic.GetTriangularSignalValue(xValues[i], amplitude, period, startTime, dutyCycle) });
+            }
+
+            return result;
         }
 
-        internal IChartValues GetJumpSignal(int v1, double v2, double v3, double v4, double v5)
+        internal IChartValues GetJumpSignal(int signalFrequency, double timeDuration, double amplitude, double jumpTime, double startTime)
         {
-            throw new NotImplementedException();
+            double[] xValues = Logic.GetTimeValues(signalFrequency, timeDuration, startTime);
+            ChartValues<ObservablePoint> result = new ChartValues<ObservablePoint>();
+
+            for (int i = 0; i < xValues.Length; i++)
+            {
+                result.Add(new ObservablePoint { X = xValues[i], Y = Logic.GetJumpSignalValue(xValues[i], amplitude, jumpTime, startTime) });
+            }
+
+            return result;
         }
 
-        internal IChartValues GetSingleImpulseSignal(int v1, double v2, double v3, double v4, double v5)
+        internal IChartValues GetSingleImpulseSignal(int signalFrequency, double timeDuration, double amplitude, double jumpTime, double startTime)
         {
-            throw new NotImplementedException();
+            double[] xValues = Logic.GetTimeValues(signalFrequency, timeDuration, startTime);
+            ChartValues<ObservablePoint> result = new ChartValues<ObservablePoint>();
+
+            for (int i = 0; i < xValues.Length; i++)
+            {
+                result.Add(new ObservablePoint { X = xValues[i], Y = Logic.GetSingleImpulseSignalValue(xValues[i], amplitude, jumpTime, startTime) });
+            }
+
+            return result;
         }
 
-        internal IChartValues GetImpulseNoise(int v1, double v2, double v3, double v4)
+        internal IChartValues GetImpulseNoise(int signalFrequency, double timeDuration, double amplitude, double impulsProbability)
         {
-            throw new NotImplementedException();
+            double[] xValues = Logic.GetTimeValues(signalFrequency, timeDuration);
+            ChartValues<ObservablePoint> result = new ChartValues<ObservablePoint>();
+
+            for (int i = 0; i < xValues.Length; i++)
+            {
+                result.Add(new ObservablePoint { X = xValues[i], Y = Logic.GetImpulseNoiseValue(xValues[i], amplitude, impulsProbability) });
+            }
+
+            return result;
         }
     }
 }
