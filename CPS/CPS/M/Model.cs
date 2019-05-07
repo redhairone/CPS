@@ -157,7 +157,7 @@ namespace CPS.M
 
             for (int i = 0; i < xValues.Length; i++)
             {
-                result.Add(new ObservablePoint { X = xValues[i], Y = Logic.GetSincReconstructionValue(samples, xValues[i],reconstructionFrequency, 0) });
+                result.Add(new ObservablePoint { X = xValues[i], Y = Logic.GetSincReconstructionValue(samples, xValues[i], reconstructionFrequency) });
             }
 
             return result;
@@ -187,6 +187,32 @@ namespace CPS.M
             for(int i = 0; i < howManySections; i++)
             {
                 result.Add(resultHelp[i]);
+            }
+
+            return result;
+        }
+
+        internal IChartValues GetQuant(ChartValues<ObservablePoint> samples, int howManyLevels)
+        {
+            ChartValues<ObservablePoint> result = new ChartValues<ObservablePoint>();
+            double[] minMax = Logic.GetMinMax(samples), yValues = new double[howManyLevels];
+            double step = Math.Abs(minMax[1] - minMax[0]) / howManyLevels;
+            int closestIndex = 0;
+
+            for(int i = 0; i < howManyLevels; i++)
+            {
+                yValues[i] = minMax[0] + i * step;
+            }
+
+            for(int i = 0; i < samples.Count; i++)
+            {
+                for(int j = 1; j < howManyLevels; j++)
+                {
+                    if (Math.Abs(yValues[j] - samples[i].Y) < Math.Abs(yValues[closestIndex] - samples[i].Y)) closestIndex = j;
+                }
+
+                result.Add(new ObservablePoint { X = samples[i].X, Y = yValues[closestIndex] });
+                closestIndex = 0;
             }
 
             return result;

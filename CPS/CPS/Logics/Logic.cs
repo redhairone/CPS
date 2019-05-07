@@ -113,12 +113,13 @@ namespace CPS.Logics
             else return 0;
         }
 
-        internal static double GetSincReconstructionValue(ChartValues<ObservablePoint> samples, double time, double frequency, int samplesAmount)
+        internal static double GetSincReconstructionValue(ChartValues<ObservablePoint> samples, double time, double frequency)
         {
             double result = 0, T = 1 / frequency;
 
             for(int i = 0; i < samples.Count; i++)
             {
+                Console.WriteLine(i + " -> "+ samples[i].Y);
                 result += samples[i].Y * Logic.Sinc(time / T - i);
             }
 

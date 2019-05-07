@@ -61,6 +61,9 @@ namespace CPS.VM
 
         private readonly Label ReconstructionFrequencyLabel = new Label { Content = "Częstotliwość rekonstrukcji:" };
         private readonly CustomTextBox<int> ReconstructionFrequencyTextBox = new CustomTextBox<int>(100);
+
+        private readonly Label QuantLevelAmountLabel = new Label { Content = "Poziomy kwantyzacji:" };
+        private readonly CustomTextBox<int> QuantLevelAmountTextBox = new CustomTextBox<int>(10);
         #endregion
 
         public ICommand GenerateButtonPressed { get; }
@@ -69,6 +72,8 @@ namespace CPS.VM
         public SeriesCollection SamplingChartSeries { get; set; }
         public SeriesCollection HistogramChartSeries { get; set; }
         public string[] HistogramLabels { get; set; }
+        public SeriesCollection ZeroHoldChartSeries { get; set; }
+        public SeriesCollection QuantChartSeries { get; set; }
         public SeriesCollection SincReconstructionChartSeries { get; set; }
         public ObservableCollection<Control> SignalParametersCollection { get; set; }
         public ObservableCollection<Control> AdditionalParametersCollection { get; set; }
@@ -116,17 +121,29 @@ namespace CPS.VM
                     StrokeThickness = 2
                 }
             };
+            QuantChartSeries = new SeriesCollection
+            {
+                new StepLineSeries
+                {
+                    Title = "Kwantyzacja równomierna z obcięciem"
+                }
+            };
+            ZeroHoldChartSeries = new SeriesCollection
+            {
+                new StepLineSeries
+                {
+                    Title = "Ekstrapolacja zerowego rzędu"
+                }
+            };
             SincReconstructionChartSeries = new SeriesCollection
             {
                 new LineSeries
                 {
-                    Title = "Rekonstrukcja sygnału",
-                    PointGeometry = null
+                    Title = "Rekonstrukcja sygnału"
                 },
                 new LineSeries
                 {
-                    Title = "Sygnał oryginalny",
-                    PointGeometry = null
+                    Title = "Sygnał oryginalny"
                 }
             };
 
@@ -144,6 +161,9 @@ namespace CPS.VM
 
             AdditionalParametersCollection.Add(ReconstructionFrequencyLabel);
             AdditionalParametersCollection.Add(ReconstructionFrequencyTextBox);
+
+            AdditionalParametersCollection.Add(QuantLevelAmountLabel);
+            AdditionalParametersCollection.Add(QuantLevelAmountTextBox);
         }
              
         public void GenerateParameters(int signalTypeChoice)
@@ -286,6 +306,10 @@ namespace CPS.VM
                 HistogramLabels = Logic.GetHistogramLabels((ChartValues<ObservablePoint>)NormalChartSeries[0].Values);
                 HistogramChartSeries[0].Values = model.GetHistogram((ChartValues<ObservablePoint>)NormalChartSeries[0].Values);
             }
+
+            QuantChartSeries[0].Values = model.GetQuant((ChartValues<ObservablePoint>)SamplingChartSeries[0].Values, QuantLevelAmountTextBox.GetValue());
+
+            ZeroHoldChartSeries[0].Values = (ChartValues<ObservablePoint>)SamplingChartSeries[0].Values;
 
             SincReconstructionChartSeries[0].Values = model.GetSincReconstruction(ReconstructionFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), (ChartValues<ObservablePoint>)SamplingChartSeries[0].Values);
             SincReconstructionChartSeries[1].Values = (ChartValues<ObservablePoint>)SamplingChartSeries[0].Values;

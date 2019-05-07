@@ -50,6 +50,16 @@
             <TabItem Header="Wykres próbkowania:">
                 <lvc:CartesianChart Series="{Binding SamplingChartSeries}" LegendLocation="Bottom"/>
             </TabItem>
+            <TabItem Header="Kwantyzacja równomierna z obcięciem:">
+                <Grid>
+                    <lvc:CartesianChart Series="{Binding QuantChartSeries}" LegendLocation="Bottom"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Ekstrapolacja zerowego rzędu:">
+                <Grid>
+                    <lvc:CartesianChart Series="{Binding ZeroHoldChartSeries}" LegendLocation="Bottom"/>
+                </Grid>
+            </TabItem>
             <TabItem Header="Rekonstrukcja sinc:">
                 <lvc:CartesianChart Series="{Binding SincReconstructionChartSeries}" LegendLocation="Bottom"/>
             </TabItem>
