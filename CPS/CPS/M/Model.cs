@@ -2,6 +2,7 @@
 using LiveCharts;
 using LiveCharts.Defaults;
 using System;
+using System.Collections.Generic;
 
 namespace CPS.M
 {
@@ -150,14 +151,14 @@ namespace CPS.M
             return result;
         }
 
-        internal IChartValues GetSincReconstruction(int reconstructionFrequency, double timeDuration, ChartValues<ObservablePoint> samples)
+        internal IChartValues GetSincReconstruction(int reconstructionFrequency, int samplingFrequency, double timeDuration, ChartValues<ObservablePoint> samples)
         {
             double[] xValues = Logic.GetTimeValues(reconstructionFrequency, timeDuration);
             ChartValues<ObservablePoint> result = new ChartValues<ObservablePoint>();
 
-            for (int i = 0; i < xValues.Length; i++)
+            foreach(var item in xValues)
             {
-                result.Add(new ObservablePoint { X = xValues[i], Y = Logic.GetSincReconstructionValue(samples, xValues[i], reconstructionFrequency) });
+                result.Add(new ObservablePoint { X = item, Y = Logic.GetSincReconstructionValue(samples, item, samplingFrequency) });
             }
 
             return result;

@@ -16,7 +16,7 @@ namespace CPS.VM
 
         #region THE_LABELS_AND_THE_TEXTBOXES
         //<--LABELS AND TEXTBOXES OF THE SIGNAL PARAMETERS TAB-->
-        private readonly Label SignalFrequencyLabel = new Label { Content = "Częstotliwość sygnału (ms):" };
+        private readonly Label SignalFrequencyLabel = new Label { Content = "Częstotliwość sygnału (HZ):" };
         private readonly CustomTextBox<int> SignalFrequencyTextBox = new CustomTextBox<int>(100);
 
         private readonly Label TimeDurationLabel = new Label { Content = "Czas trwania:" };
@@ -137,7 +137,7 @@ namespace CPS.VM
             };
             SincReconstructionChartSeries = new SeriesCollection
             {
-                new LineSeries
+                new StepLineSeries
                 {
                     Title = "Rekonstrukcja sygnału"
                 },
@@ -311,7 +311,7 @@ namespace CPS.VM
 
             ZeroHoldChartSeries[0].Values = (ChartValues<ObservablePoint>)SamplingChartSeries[0].Values;
 
-            SincReconstructionChartSeries[0].Values = model.GetSincReconstruction(ReconstructionFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), (ChartValues<ObservablePoint>)SamplingChartSeries[0].Values);
+            SincReconstructionChartSeries[0].Values = model.GetSincReconstruction(ReconstructionFrequencyTextBox.GetValue(), SamplingFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), (ChartValues<ObservablePoint>)SamplingChartSeries[0].Values);
             SincReconstructionChartSeries[1].Values = (ChartValues<ObservablePoint>)SamplingChartSeries[0].Values;
         }
     }

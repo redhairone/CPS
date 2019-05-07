@@ -8,13 +8,25 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800" MinWidth="800" MinHeight="450">
     <Grid Height="auto" Width="auto">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="240"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <Label Content="Wybierz wariant sygnału:" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Height="26" Width="218"/>
-        <ComboBox Grid.Column="0" Grid.Row="0" Margin="10,26,10,10" Height="22" VerticalAlignment="Top" SelectedIndex="{Binding SelectedSignal, UpdateSourceTrigger=PropertyChanged}">
+        <DockPanel Grid.ColumnSpan="2" Grid.Row="0">
+            <Menu>
+                <MenuItem Header="Plik">
+                    
+                </MenuItem>
+            </Menu>
+        </DockPanel>
+
+        <Label Grid.Column="0" Grid.Row="1" Content="Wybierz wariant sygnału:" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Height="26" Width="218"/>
+        <ComboBox Grid.Column="0" Grid.Row="1" Margin="10,26,10,10" Height="22" VerticalAlignment="Top" SelectedIndex="{Binding SelectedSignal, UpdateSourceTrigger=PropertyChanged}">
             <ComboBoxItem Content="(S1) Szum o rozkładzie jednostajnym." />
             <ComboBoxItem Content="(S2) Szum gaussowski."/>
             <ComboBoxItem Content="(S3) Sygnał sinusoidalny."/>
@@ -28,15 +40,15 @@
             <ComboBoxItem Content="(S11) Szum impulsowy."/>
         </ComboBox>
 
-        <TabControl Grid.Column="1" Margin="0" Grid.RowSpan="4">
+        <TabControl Grid.Column="1" Grid.Row="1" Margin="0" Grid.RowSpan="4">
             <TabItem Header="Wykres funkcji:">
                 <Grid>
-                    <lvc:CartesianChart Series="{Binding NormalChartSeries}" LegendLocation="Bottom"/>
+                    <lvc:CartesianChart Series="{Binding NormalChartSeries}" LegendLocation="Bottom" DisableAnimations="True" Hoverable="False" DataTooltip="{x:Null}"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Histogram:">
                 <Grid>
-                    <lvc:CartesianChart Series="{Binding HistogramChartSeries}" LegendLocation="Bottom">
+                    <lvc:CartesianChart Series="{Binding HistogramChartSeries}" LegendLocation="Bottom" DisableAnimations="True" Hoverable="False" DataTooltip="{x:Null}">
                         <lvc:CartesianChart.AxisX>
                             <lvc:Axis Labels="{Binding HistogramLabels}" Position="LeftBottom" LabelsRotation="20">
                                 <lvc:Axis.Separator>
@@ -48,24 +60,24 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Wykres próbkowania:">
-                <lvc:CartesianChart Series="{Binding SamplingChartSeries}" LegendLocation="Bottom"/>
+                <lvc:CartesianChart Series="{Binding SamplingChartSeries}" LegendLocation="Bottom" DisableAnimations="True" Hoverable="False" DataTooltip="{x:Null}"/>
             </TabItem>
             <TabItem Header="Kwantyzacja równomierna z obcięciem:">
                 <Grid>
-                    <lvc:CartesianChart Series="{Binding QuantChartSeries}" LegendLocation="Bottom"/>
+                    <lvc:CartesianChart Series="{Binding QuantChartSeries}" LegendLocation="Bottom" DisableAnimations="True" Hoverable="False" DataTooltip="{x:Null}"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Ekstrapolacja zerowego rzędu:">
                 <Grid>
-                    <lvc:CartesianChart Series="{Binding ZeroHoldChartSeries}" LegendLocation="Bottom"/>
+                    <lvc:CartesianChart Series="{Binding ZeroHoldChartSeries}" LegendLocation="Bottom" DisableAnimations="True" Hoverable="False" DataTooltip="{x:Null}"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Rekonstrukcja sinc:">
-                <lvc:CartesianChart Series="{Binding SincReconstructionChartSeries}" LegendLocation="Bottom"/>
+                <lvc:CartesianChart Series="{Binding SincReconstructionChartSeries}" LegendLocation="Bottom" DisableAnimations="True" Hoverable="False" DataTooltip="{x:Null}"/>
             </TabItem>
         </TabControl>
 
-        <ScrollViewer Margin="0,53,0,40">
+        <ScrollViewer Grid.Column="0" Grid.Row="1" Margin="0,53,0,40">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -78,14 +90,19 @@
                         <ItemsControl ItemsSource="{Binding Path= SignalParametersCollection}"/>
                     </StackPanel>
                 </Expander>
-                <Expander Header="Parametry dodatkowe:" Grid.Row="1" >
+                <Expander Header="Parametry dodatkowe:" Grid.Row="1" IsExpanded="True" >
                     <StackPanel>
                         <ItemsControl ItemsSource="{Binding Path=AdditionalParametersCollection}"/>
+                    </StackPanel>
+                </Expander>
+                <Expander Header="Wyniki:" Grid.Row="2" >
+                    <StackPanel>
+                        <ItemsControl ItemsSource="{Binding Path=ResultsCollection}"/>
                     </StackPanel>
                 </Expander>
             </Grid>
         </ScrollViewer>
 
-        <Button Content="Generate" Margin="5,0,5,7.5" VerticalAlignment="Bottom" Width="Auto" Height="25" Command="{Binding GenerateButtonPressed}"/>
+        <Button Grid.Column="0" Grid.Row="1" Content="Generate" Margin="5,0,5,7.5" VerticalAlignment="Bottom" Width="Auto" Height="25" Command="{Binding GenerateButtonPressed}"/>
     </Grid>
 </Window>

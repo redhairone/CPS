@@ -14,9 +14,9 @@ namespace CPS.Logics
 
         public static double[] GetTimeValues(int signalFrequency, double timeDuration, double startTime = 0)
         {
-            Console.WriteLine((int)(timeDuration / (signalFrequency / 1000.0) + 1.0));
-            double[] result = new double[(int)(timeDuration/(signalFrequency/1000.0) + 1.0)];
-            double step = signalFrequency / 1000.0;
+            Console.WriteLine((int)(timeDuration / (1.0 / signalFrequency) + 1.0));
+            double[] result = new double[(int)(timeDuration/(1.0 / signalFrequency) + 1.0)];
+            double step = 1.0 / signalFrequency;
 
             result[0] = startTime;
 
@@ -115,12 +115,12 @@ namespace CPS.Logics
 
         internal static double GetSincReconstructionValue(ChartValues<ObservablePoint> samples, double time, double frequency)
         {
-            double result = 0, T = 1 / frequency;
+            double result = 0.0, T = 1.0 / frequency, helpMe;
 
             for(int i = 0; i < samples.Count; i++)
             {
-                Console.WriteLine(i + " -> "+ samples[i].Y);
-                result += samples[i].Y * Logic.Sinc(time / T - i);
+                helpMe = time / T - i;
+                result += samples[i].Y * Logic.Sinc(helpMe);
             }
 
             return result;
@@ -128,7 +128,7 @@ namespace CPS.Logics
 
         internal static double Sinc(double p)
         {
-            if (p < 0.000001) return 1;
+            if (p == 0.0) return 1.0;
             else return Math.Sin(Math.PI * p) / (Math.PI * p);
         }
 
