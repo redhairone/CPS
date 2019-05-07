@@ -1,4 +1,5 @@
-﻿using CPS.M;
+﻿using CPS.Logics;
+using CPS.M;
 using LiveCharts;
 using LiveCharts.Defaults;
 using LiveCharts.Wpf;
@@ -56,13 +57,19 @@ namespace CPS.VM
 
         //<--LABELS AND TEXTBOXES OF THE ADDITIONAL PARAMETERS TAB-->
         private readonly Label SamplingFrequencyLabel = new Label { Content = "Częstotliwość próbkowania:" };
-        private readonly CustomTextBox<double> SamplingFrequencyTextBox = new CustomTextBox<double>(0.1);
+        private readonly CustomTextBox<int> SamplingFrequencyTextBox = new CustomTextBox<int>(100);
+
+        private readonly Label ReconstructionFrequencyLabel = new Label { Content = "Częstotliwość rekonstrukcji:" };
+        private readonly CustomTextBox<int> ReconstructionFrequencyTextBox = new CustomTextBox<int>(100);
         #endregion
 
         public ICommand GenerateButtonPressed { get; }
 
         public SeriesCollection NormalChartSeries { get; set; }
         public SeriesCollection SamplingChartSeries { get; set; }
+        public SeriesCollection HistogramChartSeries { get; set; }
+        public string[] HistogramLabels { get; set; }
+        public SeriesCollection SincReconstructionChartSeries { get; set; }
         public ObservableCollection<Control> SignalParametersCollection { get; set; }
         public ObservableCollection<Control> AdditionalParametersCollection { get; set; }
         public int SelectedSignal
@@ -93,6 +100,13 @@ namespace CPS.VM
                     StrokeThickness = 2
                 }
             };
+            HistogramChartSeries = new SeriesCollection
+            {
+                new ColumnSeries
+                {
+                    Title = "Histogram wygenerowanego sygnału"
+                }
+            };
             SamplingChartSeries = new SeriesCollection
             {
                 new ScatterSeries
@@ -100,6 +114,19 @@ namespace CPS.VM
                     Title = "Spróbkowany sygnał",
                     PointGeometry = DefaultGeometries.Diamond,
                     StrokeThickness = 2
+                }
+            };
+            SincReconstructionChartSeries = new SeriesCollection
+            {
+                new LineSeries
+                {
+                    Title = "Rekonstrukcja sygnału",
+                    PointGeometry = null
+                },
+                new LineSeries
+                {
+                    Title = "Sygnał oryginalny",
+                    PointGeometry = null
                 }
             };
 
@@ -114,6 +141,9 @@ namespace CPS.VM
 
             AdditionalParametersCollection.Add(SamplingFrequencyLabel);
             AdditionalParametersCollection.Add(SamplingFrequencyTextBox);
+
+            AdditionalParametersCollection.Add(ReconstructionFrequencyLabel);
+            AdditionalParametersCollection.Add(ReconstructionFrequencyTextBox);
         }
              
         public void GenerateParameters(int signalTypeChoice)
@@ -202,38 +232,63 @@ namespace CPS.VM
             {
                 case 0:
                     NormalChartSeries[0].Values = model.GetUniformDistributionNoise(SignalFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), MinimumTextBox.GetValue(), MaximumTextBox.GetValue());
+                    SamplingChartSeries[0].Values = model.GetUniformDistributionNoise(SamplingFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), MinimumTextBox.GetValue(), MaximumTextBox.GetValue());
                     break;
                 case 1:
                     NormalChartSeries[0].Values = model.GetGaussianNoise(SignalFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), MeanTextBox.GetValue(), VarianceTextBox.GetValue());
+                    SamplingChartSeries[0].Values = model.GetGaussianNoise(SamplingFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), MeanTextBox.GetValue(), VarianceTextBox.GetValue());
                     break;
                 case 2:
                     NormalChartSeries[0].Values = model.GetSinSignal(SignalFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), FrequencyTextBox.GetValue(), StartTimetextBox.GetValue());
+                    SamplingChartSeries[0].Values = model.GetSinSignal(SamplingFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), FrequencyTextBox.GetValue(), StartTimetextBox.GetValue());
                     break;
                 case 3:
                     NormalChartSeries[0].Values = model.GetSinAbsSignal(SignalFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), FrequencyTextBox.GetValue(), StartTimetextBox.GetValue());
+                    SamplingChartSeries[0].Values = model.GetSinAbsSignal(SamplingFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), FrequencyTextBox.GetValue(), StartTimetextBox.GetValue());
                     break;
                 case 4:
                     NormalChartSeries[0].Values = model.GetSinDoubleAbsSignal(SignalFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), FrequencyTextBox.GetValue(), StartTimetextBox.GetValue());
+                    SamplingChartSeries[0].Values = model.GetSinDoubleAbsSignal(SamplingFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), FrequencyTextBox.GetValue(), StartTimetextBox.GetValue());
                     break;
                 case 5:
                     NormalChartSeries[0].Values = model.GetRectangularSignal(SignalFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), PeriodTextBox.GetValue(), StartTimetextBox.GetValue(), DutyCycleTextBox.GetValue());
+                    SamplingChartSeries[0].Values = model.GetRectangularSignal(SamplingFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), PeriodTextBox.GetValue(), StartTimetextBox.GetValue(), DutyCycleTextBox.GetValue());
                     break;
                 case 6:
                     NormalChartSeries[0].Values = model.GetSymmetricRectangularSignal(SignalFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), PeriodTextBox.GetValue(), StartTimetextBox.GetValue(), DutyCycleTextBox.GetValue());
+                    SamplingChartSeries[0].Values = model.GetSymmetricRectangularSignal(SamplingFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), PeriodTextBox.GetValue(), StartTimetextBox.GetValue(), DutyCycleTextBox.GetValue());
                     break;
                 case 7:
                     NormalChartSeries[0].Values = model.GetTriangularSignal(SignalFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), PeriodTextBox.GetValue(), StartTimetextBox.GetValue(), DutyCycleTextBox.GetValue());
+                    SamplingChartSeries[0].Values = model.GetTriangularSignal(SamplingFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), PeriodTextBox.GetValue(), StartTimetextBox.GetValue(), DutyCycleTextBox.GetValue());
                     break;
                 case 8:
                     NormalChartSeries[0].Values = model.GetJumpSignal(SignalFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), JumpTimeTextBox.GetValue(), StartTimetextBox.GetValue());
+                    SamplingChartSeries[0].Values = model.GetJumpSignal(SamplingFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), JumpTimeTextBox.GetValue(), StartTimetextBox.GetValue());
                     break;
                 case 9:
                     NormalChartSeries[1].Values = model.GetSingleImpulseSignal(SignalFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), JumpTimeTextBox.GetValue(), StartTimetextBox.GetValue());
+                    SamplingChartSeries[0].Values = model.GetSingleImpulseSignal(SamplingFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), JumpTimeTextBox.GetValue(), StartTimetextBox.GetValue());
                     break;
                 case 10:
                     NormalChartSeries[1].Values = model.GetImpulseNoise(SignalFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), ImpulseProbabilityTextBox.GetValue());
+                    SamplingChartSeries[0].Values = model.GetImpulseNoise(SamplingFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), ImpulseProbabilityTextBox.GetValue());
                     break;
             }
+
+            if (SelectedSignal >= 9)
+            {
+                HistogramLabels = Logic.GetHistogramLabels((ChartValues<ObservablePoint>)NormalChartSeries[1].Values);
+                HistogramChartSeries[0].Values = model.GetHistogram((ChartValues<ObservablePoint>)NormalChartSeries[1].Values);
+            }
+            else
+            {
+                HistogramLabels = Logic.GetHistogramLabels((ChartValues<ObservablePoint>)NormalChartSeries[0].Values);
+                HistogramChartSeries[0].Values = model.GetHistogram((ChartValues<ObservablePoint>)NormalChartSeries[0].Values);
+            }
+
+            SincReconstructionChartSeries[0].Values = model.GetSincReconstruction(ReconstructionFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), (ChartValues<ObservablePoint>)SamplingChartSeries[0].Values);
+            SincReconstructionChartSeries[1].Values = (ChartValues<ObservablePoint>)SamplingChartSeries[0].Values;
         }
     }
 }

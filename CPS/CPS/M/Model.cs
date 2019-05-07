@@ -149,5 +149,47 @@ namespace CPS.M
 
             return result;
         }
+
+        internal IChartValues GetSincReconstruction(int reconstructionFrequency, double timeDuration, ChartValues<ObservablePoint> samples)
+        {
+            double[] xValues = Logic.GetTimeValues(reconstructionFrequency, timeDuration);
+            ChartValues<ObservablePoint> result = new ChartValues<ObservablePoint>();
+
+            for (int i = 0; i < xValues.Length; i++)
+            {
+                result.Add(new ObservablePoint { X = xValues[i], Y = Logic.GetSincReconstructionValue(samples, xValues[i],reconstructionFrequency, 0) });
+            }
+
+            return result;
+        }
+
+        internal IChartValues GetHistogram(ChartValues<ObservablePoint> samples, int howManySections = 10)
+        {
+            ChartValues<int> result = new ChartValues<int>();
+            double[] minMax = Logic.GetMinMax(samples);
+            int[] resultHelp = new int[howManySections];
+            double step = Math.Abs(minMax[1] - minMax[0]) / howManySections;
+
+            Array.Clear(resultHelp, 0, howManySections);
+
+            for(int i = 0; i < samples.Count; i++)
+            {
+                for(int j = howManySections-1; j >= 0; j--)
+                {
+                    if(samples[i].Y > (minMax[0] + j * step))
+                    {
+                        resultHelp[j] += 1;
+                        break;
+                    }
+                }
+            }
+
+            for(int i = 0; i < howManySections; i++)
+            {
+                result.Add(resultHelp[i]);
+            }
+
+            return result;
+        }
     }
 }

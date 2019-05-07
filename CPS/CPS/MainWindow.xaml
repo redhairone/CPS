@@ -9,8 +9,8 @@
         Title="MainWindow" Height="450" Width="800" MinWidth="800" MinHeight="450">
     <Grid Height="auto" Width="auto">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="3*"/>
-            <ColumnDefinition Width="7*"/>
+            <ColumnDefinition Width="240"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
         <Label Content="Wybierz wariant sygnału:" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Height="26" Width="218"/>
@@ -29,13 +29,29 @@
         </ComboBox>
 
         <TabControl Grid.Column="1" Margin="0" Grid.RowSpan="4">
-            <TabItem Header="Wykres funkcji">
+            <TabItem Header="Wykres funkcji:">
                 <Grid>
                     <lvc:CartesianChart Series="{Binding NormalChartSeries}" LegendLocation="Bottom"/>
                 </Grid>
             </TabItem>
-            <TabItem Header="Histogram">
-                <Grid Background="#FFE5E5E5"/>
+            <TabItem Header="Histogram:">
+                <Grid>
+                    <lvc:CartesianChart Series="{Binding HistogramChartSeries}" LegendLocation="Bottom">
+                        <lvc:CartesianChart.AxisX>
+                            <lvc:Axis Labels="{Binding HistogramLabels}" Position="LeftBottom" LabelsRotation="20">
+                                <lvc:Axis.Separator>
+                                    <lvc:Separator Step="1"/>
+                                </lvc:Axis.Separator>
+                            </lvc:Axis>
+                        </lvc:CartesianChart.AxisX>
+                    </lvc:CartesianChart>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Wykres próbkowania:">
+                <lvc:CartesianChart Series="{Binding SamplingChartSeries}" LegendLocation="Bottom"/>
+            </TabItem>
+            <TabItem Header="Rekonstrukcja sinc:">
+                <lvc:CartesianChart Series="{Binding SincReconstructionChartSeries}" LegendLocation="Bottom"/>
             </TabItem>
         </TabControl>
 

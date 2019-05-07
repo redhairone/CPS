@@ -1,4 +1,6 @@
-﻿using System;
+﻿using LiveCharts;
+using LiveCharts.Defaults;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -109,6 +111,55 @@ namespace CPS.Logics
         {
             if (impulsProbability > Random.NextDouble()) return amplitude;
             else return 0;
+        }
+
+        internal static double GetSincReconstructionValue(ChartValues<ObservablePoint> samples, double time, double frequency, int samplesAmount)
+        {
+            double result = 0, T = 1 / frequency;
+
+            for(int i = 0; i < samples.Count; i++)
+            {
+                result += samples[i].Y * Logic.Sinc(time / T - i);
+            }
+
+            return result;
+        }
+
+        internal static double Sinc(double p)
+        {
+            if (p < 0.000001) return 1;
+            else return Math.Sin(Math.PI * p) / (Math.PI * p);
+        }
+
+        internal static string[] GetHistogramLabels(ChartValues<ObservablePoint> samples, int howManySections = 10)
+        {
+            string[] result = new string[howManySections+1];
+            double[] minMax = Logic.GetMinMax(samples);
+
+            double step = Math.Abs(minMax[1] - minMax[0]) / howManySections;
+
+            for(int i=0; i < howManySections+1; i++)
+            {
+                result[i] = "(" + Math.Round(minMax[0] + (i) * step, 3) + "; " + Math.Round(minMax[0] + (i+1) * step, 3) + ")";
+            }
+
+            return result;
+        }
+
+        internal static double[] GetMinMax(ChartValues<ObservablePoint> samples)
+        {
+            
+            double[] result = new double[] { samples[0].Y, samples[0].Y };
+
+            for (int i = 1; i < samples.Count; i++)
+            {
+                if (samples[i].Y > result[1]) result[1] = samples[i].Y;
+                else if (samples[i].Y < result[0]) result[0] = samples[i].Y;
+            }
+
+
+
+            return result;
         }
     }
 }
