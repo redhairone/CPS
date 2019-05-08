@@ -1,8 +1,13 @@
 ﻿using CPS.Logics;
 using LiveCharts;
 using LiveCharts.Defaults;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Windows;
 
 namespace CPS.M
 {
@@ -217,6 +222,44 @@ namespace CPS.M
             }
 
             return result;
+        }
+
+        internal void Serialize(DataCapsule capsule)
+        {
+            SerializationLogics.Serialize(capsule);
+        }
+
+        internal IChartValues Deserialize()
+        {
+            return SerializationLogics.Deserialize().GetValues();
+        }
+
+        internal IChartValues Add()
+        {
+            DataCapsule[] loaded = SerializationLogics.LoadFiles();
+
+            return loaded[0].Divide(loaded[1]).GetValues();
+        }
+
+        internal IChartValues Subtract()
+        {
+            DataCapsule[] loaded = SerializationLogics.LoadFiles();
+
+            return loaded[0].Subtract(loaded[1]).GetValues();
+        }
+
+        internal IChartValues Multiply()
+        {
+            DataCapsule[] loaded = SerializationLogics.LoadFiles();
+
+            return loaded[0].Multiply(loaded[1]).GetValues();
+        }
+
+        internal IChartValues Divide()
+        {
+            DataCapsule[] loaded = SerializationLogics.LoadFiles();
+
+            return loaded[0].Divide(loaded[1]).GetValues();
         }
     }
 }

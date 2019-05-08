@@ -20,7 +20,14 @@
         <DockPanel Grid.ColumnSpan="2" Grid.Row="0">
             <Menu>
                 <MenuItem Header="Plik">
-                    
+                    <MenuItem Header="Zapisz" Command="{Binding SaveButtonPressed}"/>
+                    <MenuItem Header="Wczytaj" Command="{Binding LoadButtonPressed}"/>
+                </MenuItem>
+                <MenuItem Header="Operacje">
+                    <MenuItem Header="Dodawanie" Command="{Binding AdditionButtonPressed}"/>
+                    <MenuItem Header="Odejmowanie" Command="{Binding SubtractionButtonPressed}"/>
+                    <MenuItem Header="Mnożenie" Command="{Binding MultiplicationButtonPressed}"/>
+                    <MenuItem Header="Dzielenie" Command="{Binding DivisionButtonPressed}"/>
                 </MenuItem>
             </Menu>
         </DockPanel>

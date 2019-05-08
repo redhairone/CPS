@@ -45,10 +45,15 @@ namespace CPS.Logics
                 valuesOne = sincValues;
                 valuesTwo = MathLogics.AdjustSize(signalValues, sincValues.Count);
             }
-            else
+            else if (sincValues.Count < signalValues.Count)
             {
                 valuesOne = signalValues;
                 valuesTwo = MathLogics.AdjustSize(sincValues, signalValues.Count);
+            }
+            else
+            {
+                valuesOne = signalValues;
+                valuesTwo = sincValues;
             }
 
             double fraction = 1.0 / valuesOne.Count, sum = 0;
@@ -98,9 +103,13 @@ namespace CPS.Logics
             {
                 values = MathLogics.AdjustSize(signalValues, sincValues.Count);
             }
-            else
+            else if (sincValues.Count < signalValues.Count)
             {
                 values = MathLogics.AdjustSize(sincValues, signalValues.Count);
+            }
+            else
+            {
+                values = sincValues;
             }
 
             double mse = ResultLogics.GetMeanSquareError(sincValues, signalValues), numerator = values[0].Y;
@@ -120,10 +129,15 @@ namespace CPS.Logics
                 sinc = sincValues;
                 signal = MathLogics.AdjustSize(signalValues, sincValues.Count);
             }
-            else
+            else if (sincValues.Count < signalValues.Count)
             {
                 signal = signalValues;
                 sinc = MathLogics.AdjustSize(sincValues, signalValues.Count);
+            }
+            else
+            {
+                signal = signalValues;
+                sinc = sincValues;
             }
 
             double diff = Math.Abs(sinc[0].Y - signal[0].Y);

@@ -97,6 +97,12 @@ namespace CPS.VM
         #endregion
 
         public ICommand GenerateButtonPressed { get; }
+        public ICommand SaveButtonPressed { get; }
+        public ICommand LoadButtonPressed { get; }
+        public ICommand AdditionButtonPressed { get; }
+        public ICommand SubtractionButtonPressed { get; }
+        public ICommand MultiplicationButtonPressed { get; }
+        public ICommand DivisionButtonPressed { get; }
 
         public SeriesCollection NormalChartSeries { get; set; }
         public SeriesCollection SamplingChartSeries { get; set; }
@@ -174,6 +180,12 @@ namespace CPS.VM
             };
 
             GenerateButtonPressed = new RelayCommand(Generate);
+            SaveButtonPressed = new RelayCommand(Save);
+            LoadButtonPressed = new RelayCommand(Load);
+            AdditionButtonPressed = new RelayCommand(Add);
+            SubtractionButtonPressed = new RelayCommand(Subtract);
+            MultiplicationButtonPressed = new RelayCommand(Multiply);
+            DivisionButtonPressed = new RelayCommand(Divide);
 
             Config();
         }
@@ -399,6 +411,37 @@ namespace CPS.VM
             RatioTextBox.Text = ResultLogics.GetRatio((ChartValues<ObservablePoint>)SincReconstructionChartSeries[0].Values, (ChartValues<ObservablePoint>)SamplingChartSeries[0].Values).ToString();
             MaxRatioTextBox.Text = ResultLogics.GetMaxRatio((ChartValues<ObservablePoint>)SincReconstructionChartSeries[0].Values, (ChartValues<ObservablePoint>)SamplingChartSeries[0].Values).ToString();
             MaxDiffrenceTextBox.Text = ResultLogics.GetMaxDiffrence((ChartValues<ObservablePoint>)SincReconstructionChartSeries[0].Values, (ChartValues<ObservablePoint>)SamplingChartSeries[0].Values).ToString();
+        }
+
+        public void Save()
+        {
+            DataCapsule capsule = new DataCapsule((ChartValues<ObservablePoint>)NormalChartSeries[0].Values);
+            model.Serialize(capsule);
+        }
+
+        public void Load()
+        {
+            NormalChartSeries[0].Values = model.Deserialize();
+        }
+
+        public void Add()
+        {
+            NormalChartSeries[0].Values = model.Add();
+        }
+
+        public void Subtract()
+        {
+            NormalChartSeries[0].Values = model.Subtract();
+        }
+
+        public void Multiply()
+        {
+            NormalChartSeries[0].Values = model.Multiply();
+        }
+
+        public void Divide()
+        {
+            NormalChartSeries[0].Values = model.Divide();
         }
     }
 }

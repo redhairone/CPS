@@ -65,8 +65,11 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Logics\MathLogics.cs" />
+    <Compile Include="Logics\OperationLogics.cs" />
+    <Compile Include="Logics\SerializationLogics.cs" />
     <Compile Include="Logics\SignalLogics.cs" />
     <Compile Include="Logics\ResultLogics.cs" />
+    <Compile Include="M\DataCapsule.cs" />
     <Compile Include="M\Model.cs" />
     <Compile Include="VM\RelayCommand.cs" />
     <Compile Include="VM\ViewModel.cs" />
