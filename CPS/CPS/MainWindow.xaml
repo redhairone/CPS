@@ -83,6 +83,7 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
                 <Expander Header="Parametry" IsExpanded="true">
@@ -98,6 +99,16 @@
                 <Expander Header="Wyniki:" Grid.Row="2" >
                     <StackPanel>
                         <ItemsControl ItemsSource="{Binding Path=ResultsCollection}"/>
+                    </StackPanel>
+                </Expander>
+                <Expander Header="Wyniki:" Grid.Row="2" >
+                    <StackPanel>
+                        <ItemsControl ItemsSource="{Binding Path=ResultsCollection}"/>
+                    </StackPanel>
+                </Expander>
+                <Expander Header="Wyniki sinc:" Grid.Row="3" >
+                    <StackPanel>
+                        <ItemsControl ItemsSource="{Binding Path=SincResultsCollection}"/>
                     </StackPanel>
                 </Expander>
             </Grid>

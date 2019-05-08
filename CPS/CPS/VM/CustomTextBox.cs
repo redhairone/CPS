@@ -15,6 +15,13 @@ namespace CPS.VM
             this.Text = value.ToString();
         }
 
+        public CustomTextBox(bool isReadOnly)
+        {
+            this.Margin = new System.Windows.Thickness(10, 0, 10, 0);
+            this.Text = "0,0";
+            this.IsReadOnly = isReadOnly;
+        }
+
         public T GetValue()
         {
             T example = (T)Convert.ChangeType(this.Text, typeof(T));

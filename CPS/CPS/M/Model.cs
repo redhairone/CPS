@@ -10,12 +10,12 @@ namespace CPS.M
     {
         internal IChartValues GetUniformDistributionNoise(int signalFrequency, double timeDuration, double minimum, double maximum)
         {
-            double[] xValues = Logic.GetTimeValues(signalFrequency, timeDuration);
+            double[] xValues = Logics.SignalLogics.GetTimeValues(signalFrequency, timeDuration);
             ChartValues<ObservablePoint> result = new ChartValues<ObservablePoint>();
 
             for (int i = 0; i < xValues.Length; i++)
             {
-                result.Add(new ObservablePoint { X = xValues[i], Y = Logic.GetUniformDistributionNoiseValue(minimum, maximum) });
+                result.Add(new ObservablePoint { X = xValues[i], Y = Logics.SignalLogics.GetUniformDistributionNoiseValue(minimum, maximum) });
             }
 
             return result;
@@ -23,12 +23,12 @@ namespace CPS.M
 
         internal IChartValues GetGaussianNoise(int signalFrequency, double timeDuration, double amplitude, double mean, double variance)
         {
-            double[] xValues = Logic.GetTimeValues(signalFrequency, timeDuration);
+            double[] xValues = Logics.SignalLogics.GetTimeValues(signalFrequency, timeDuration);
             ChartValues<ObservablePoint> result = new ChartValues<ObservablePoint>();
 
             for (int i = 0; i < xValues.Length; i++)
             {
-                result.Add(new ObservablePoint { X = xValues[i], Y = Logic.GetGaussianNoiseValue(amplitude, mean, variance) });
+                result.Add(new ObservablePoint { X = xValues[i], Y = Logics.SignalLogics.GetGaussianNoiseValue(amplitude, mean, variance) });
             }
 
             return result;
@@ -36,12 +36,12 @@ namespace CPS.M
 
         internal IChartValues GetSinSignal(int signalFrequency, double timeDuration, double amplitude, double frequency, double startTime)
         {
-            double[] xValues = Logic.GetTimeValues(signalFrequency, timeDuration, startTime);
+            double[] xValues = Logics.SignalLogics.GetTimeValues(signalFrequency, timeDuration, startTime);
             ChartValues<ObservablePoint> result = new ChartValues<ObservablePoint>();
 
             for (int i = 0; i < xValues.Length; i++)
             {
-                result.Add(new ObservablePoint { X = xValues[i], Y = Logic.GetSinValue(xValues[i], amplitude, frequency) });
+                result.Add(new ObservablePoint { X = xValues[i], Y = Logics.SignalLogics.GetSinValue(xValues[i], amplitude, frequency) });
             }
 
             return result;
@@ -49,12 +49,12 @@ namespace CPS.M
 
         internal IChartValues GetSinAbsSignal(int signalFrequency, double timeDuration, double amplitude, double frequency, double startTime)
         {
-            double[] xValues = Logic.GetTimeValues(signalFrequency, timeDuration, startTime);
+            double[] xValues = Logics.SignalLogics.GetTimeValues(signalFrequency, timeDuration, startTime);
             ChartValues<ObservablePoint> result = new ChartValues<ObservablePoint>();
 
             for (int i = 0; i < xValues.Length; i++)
             {
-                result.Add(new ObservablePoint { X = xValues[i], Y = Logic.GetSinAbsValue(xValues[i], amplitude, frequency) });
+                result.Add(new ObservablePoint { X = xValues[i], Y = Logics.SignalLogics.GetSinAbsValue(xValues[i], amplitude, frequency) });
             }
 
             return result;
@@ -62,12 +62,12 @@ namespace CPS.M
 
         internal IChartValues GetSinDoubleAbsSignal(int signalFrequency, double timeDuration, double amplitude, double frequency, double startTime)
         {
-            double[] xValues = Logic.GetTimeValues(signalFrequency, timeDuration, startTime);
+            double[] xValues = Logics.SignalLogics.GetTimeValues(signalFrequency, timeDuration, startTime);
             ChartValues<ObservablePoint> result = new ChartValues<ObservablePoint>();
 
             for (int i = 0; i < xValues.Length; i++)
             {
-                result.Add(new ObservablePoint { X = xValues[i], Y = Logic.GetSinDoubleAbsValue(xValues[i], amplitude, frequency) });
+                result.Add(new ObservablePoint { X = xValues[i], Y = Logics.SignalLogics.GetSinDoubleAbsValue(xValues[i], amplitude, frequency) });
             }
 
             return result;
@@ -75,12 +75,12 @@ namespace CPS.M
 
         internal IChartValues GetRectangularSignal(int signalFrequency, double timeDuration, double amplitude, double period, double startTime, double dutyCycle)
         {
-            double[] xValues = Logic.GetTimeValues(signalFrequency, timeDuration, startTime);
+            double[] xValues = Logics.SignalLogics.GetTimeValues(signalFrequency, timeDuration, startTime);
             ChartValues<ObservablePoint> result = new ChartValues<ObservablePoint>();
 
             for (int i = 0; i < xValues.Length; i++)
             {
-                result.Add(new ObservablePoint { X = xValues[i], Y = Logic.GetRectangularSignalValue(xValues[i], amplitude, period, startTime, dutyCycle) });
+                result.Add(new ObservablePoint { X = xValues[i], Y = Logics.SignalLogics.GetRectangularSignalValue(xValues[i], amplitude, period, startTime, dutyCycle) });
             }
 
             return result;
@@ -88,12 +88,12 @@ namespace CPS.M
 
         internal IChartValues GetSymmetricRectangularSignal(int signalFrequency, double timeDuration, double amplitude, double period, double startTime, double dutyCycle)
         {
-            double[] xValues = Logic.GetTimeValues(signalFrequency, timeDuration, startTime);
+            double[] xValues = Logics.SignalLogics.GetTimeValues(signalFrequency, timeDuration, startTime);
             ChartValues<ObservablePoint> result = new ChartValues<ObservablePoint>();
 
             for (int i = 0; i < xValues.Length; i++)
             {
-                result.Add(new ObservablePoint { X = xValues[i], Y = Logic.GetSymmetricRectangularSignalValue(xValues[i], amplitude, period, startTime, dutyCycle) });
+                result.Add(new ObservablePoint { X = xValues[i], Y = Logics.SignalLogics.GetSymmetricRectangularSignalValue(xValues[i], amplitude, period, startTime, dutyCycle) });
             }
 
             return result;
@@ -101,12 +101,12 @@ namespace CPS.M
 
         internal IChartValues GetTriangularSignal(int signalFrequency, double timeDuration, double amplitude, double period, double startTime, double dutyCycle)
         {
-            double[] xValues = Logic.GetTimeValues(signalFrequency, timeDuration, startTime);
+            double[] xValues = Logics.SignalLogics.GetTimeValues(signalFrequency, timeDuration, startTime);
             ChartValues<ObservablePoint> result = new ChartValues<ObservablePoint>();
 
             for (int i = 0; i < xValues.Length; i++)
             {
-                result.Add(new ObservablePoint { X = xValues[i], Y = Logic.GetTriangularSignalValue(xValues[i], amplitude, period, startTime, dutyCycle) });
+                result.Add(new ObservablePoint { X = xValues[i], Y = Logics.SignalLogics.GetTriangularSignalValue(xValues[i], amplitude, period, startTime, dutyCycle) });
             }
 
             return result;
@@ -114,12 +114,12 @@ namespace CPS.M
 
         internal IChartValues GetJumpSignal(int signalFrequency, double timeDuration, double amplitude, double jumpTime, double startTime)
         {
-            double[] xValues = Logic.GetTimeValues(signalFrequency, timeDuration, startTime);
+            double[] xValues = Logics.SignalLogics.GetTimeValues(signalFrequency, timeDuration, startTime);
             ChartValues<ObservablePoint> result = new ChartValues<ObservablePoint>();
 
             for (int i = 0; i < xValues.Length; i++)
             {
-                result.Add(new ObservablePoint { X = xValues[i], Y = Logic.GetJumpSignalValue(xValues[i], amplitude, jumpTime, startTime) });
+                result.Add(new ObservablePoint { X = xValues[i], Y = Logics.SignalLogics.GetJumpSignalValue(xValues[i], amplitude, jumpTime, startTime) });
             }
 
             return result;
@@ -127,12 +127,12 @@ namespace CPS.M
 
         internal IChartValues GetSingleImpulseSignal(int signalFrequency, double timeDuration, double amplitude, double jumpTime, double startTime)
         {
-            double[] xValues = Logic.GetTimeValues(signalFrequency, timeDuration, startTime);
+            double[] xValues = Logics.SignalLogics.GetTimeValues(signalFrequency, timeDuration, startTime);
             ChartValues<ObservablePoint> result = new ChartValues<ObservablePoint>();
 
             for (int i = 0; i < xValues.Length; i++)
             {
-                result.Add(new ObservablePoint { X = xValues[i], Y = Logic.GetSingleImpulseSignalValue(xValues[i], amplitude, jumpTime, startTime) });
+                result.Add(new ObservablePoint { X = xValues[i], Y = Logics.SignalLogics.GetSingleImpulseSignalValue(xValues[i], amplitude, jumpTime, startTime) });
             }
 
             return result;
@@ -140,12 +140,12 @@ namespace CPS.M
 
         internal IChartValues GetImpulseNoise(int signalFrequency, double timeDuration, double amplitude, double impulsProbability)
         {
-            double[] xValues = Logic.GetTimeValues(signalFrequency, timeDuration);
+            double[] xValues = Logics.SignalLogics.GetTimeValues(signalFrequency, timeDuration);
             ChartValues<ObservablePoint> result = new ChartValues<ObservablePoint>();
 
             for (int i = 0; i < xValues.Length; i++)
             {
-                result.Add(new ObservablePoint { X = xValues[i], Y = Logic.GetImpulseNoiseValue(xValues[i], amplitude, impulsProbability) });
+                result.Add(new ObservablePoint { X = xValues[i], Y = Logics.SignalLogics.GetImpulseNoiseValue(xValues[i], amplitude, impulsProbability) });
             }
 
             return result;
@@ -153,12 +153,12 @@ namespace CPS.M
 
         internal IChartValues GetSincReconstruction(int reconstructionFrequency, int samplingFrequency, double timeDuration, ChartValues<ObservablePoint> samples)
         {
-            double[] xValues = Logic.GetTimeValues(reconstructionFrequency, timeDuration);
+            double[] xValues = Logics.SignalLogics.GetTimeValues(reconstructionFrequency, timeDuration);
             ChartValues<ObservablePoint> result = new ChartValues<ObservablePoint>();
 
             foreach(var item in xValues)
             {
-                result.Add(new ObservablePoint { X = item, Y = Logic.GetSincReconstructionValue(samples, item, samplingFrequency) });
+                result.Add(new ObservablePoint { X = item, Y = Logics.SignalLogics.GetSincReconstructionValue(samples, item, samplingFrequency) });
             }
 
             return result;
@@ -167,7 +167,7 @@ namespace CPS.M
         internal IChartValues GetHistogram(ChartValues<ObservablePoint> samples, int howManySections = 10)
         {
             ChartValues<int> result = new ChartValues<int>();
-            double[] minMax = Logic.GetMinMax(samples);
+            double[] minMax = Logics.MathLogics.GetMinMax(samples);
             int[] resultHelp = new int[howManySections];
             double step = Math.Abs(minMax[1] - minMax[0]) / howManySections;
 
@@ -196,7 +196,7 @@ namespace CPS.M
         internal IChartValues GetQuant(ChartValues<ObservablePoint> samples, int howManyLevels)
         {
             ChartValues<ObservablePoint> result = new ChartValues<ObservablePoint>();
-            double[] minMax = Logic.GetMinMax(samples), yValues = new double[howManyLevels];
+            double[] minMax = Logics.MathLogics.GetMinMax(samples), yValues = new double[howManyLevels];
             double step = Math.Abs(minMax[1] - minMax[0]) / howManyLevels;
             int closestIndex = 0;
 

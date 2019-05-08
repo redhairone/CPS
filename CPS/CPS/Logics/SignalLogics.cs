@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CPS.Logics
 {
-    class Logic
+    class SignalLogics
     {
         private static Random Random = new Random();
 
@@ -50,7 +50,7 @@ namespace CPS.Logics
 
         internal static double GetSinDoubleAbsValue(double time, double amplitude, double frequency)
         {
-            return Math.Abs(Logic.GetSinValue(time, amplitude, frequency));
+            return Math.Abs(SignalLogics.GetSinValue(time, amplitude, frequency));
         }
 
         internal static double GetRectangularSignalValue(double time, double amplitude, double period, double startTime, double dutyCycle)
@@ -120,22 +120,16 @@ namespace CPS.Logics
             for(int i = 0; i < samples.Count; i++)
             {
                 helpMe = time / T - i;
-                result += samples[i].Y * Logic.Sinc(helpMe);
+                result += samples[i].Y * MathLogics.Sinc(helpMe);
             }
 
             return result;
         }
 
-        internal static double Sinc(double p)
-        {
-            if (p == 0.0) return 1.0;
-            else return Math.Sin(Math.PI * p) / (Math.PI * p);
-        }
-
         internal static string[] GetHistogramLabels(ChartValues<ObservablePoint> samples, int howManySections = 10)
         {
             string[] result = new string[howManySections+1];
-            double[] minMax = Logic.GetMinMax(samples);
+            double[] minMax = MathLogics.GetMinMax(samples);
 
             double step = Math.Abs(minMax[1] - minMax[0]) / howManySections;
 
@@ -143,22 +137,6 @@ namespace CPS.Logics
             {
                 result[i] = "(" + Math.Round(minMax[0] + (i) * step, 3) + "; " + Math.Round(minMax[0] + (i+1) * step, 3) + ")";
             }
-
-            return result;
-        }
-
-        internal static double[] GetMinMax(ChartValues<ObservablePoint> samples)
-        {
-            
-            double[] result = new double[] { samples[0].Y, samples[0].Y };
-
-            for (int i = 1; i < samples.Count; i++)
-            {
-                if (samples[i].Y > result[1]) result[1] = samples[i].Y;
-                else if (samples[i].Y < result[0]) result[0] = samples[i].Y;
-            }
-
-
 
             return result;
         }

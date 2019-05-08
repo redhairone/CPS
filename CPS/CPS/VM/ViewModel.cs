@@ -6,6 +6,7 @@ using LiveCharts.Wpf;
 using System.Collections.ObjectModel;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace CPS.VM
 {
@@ -31,8 +32,8 @@ namespace CPS.VM
         private readonly Label MeanLabel = new Label { Content = "Średnia:" };
         private readonly CustomTextBox<double> MeanTextBox = new CustomTextBox<double>();
 
-        private readonly Label VarianceLabel = new Label { Content = "Odchylenie:" };
-        private readonly CustomTextBox<double> VarianceTextBox = new CustomTextBox<double>();
+        private readonly Label DeviationLabel = new Label { Content = "Odchylenie:" };
+        private readonly CustomTextBox<double> DeviationTextBox = new CustomTextBox<double>();
 
         private readonly Label AmplitudeLabel = new Label { Content = "Amplituda:" };
         private readonly CustomTextBox<double> AmplitudeTextBox = new CustomTextBox<double>(2);
@@ -64,6 +65,35 @@ namespace CPS.VM
 
         private readonly Label QuantLevelAmountLabel = new Label { Content = "Poziomy kwantyzacji:" };
         private readonly CustomTextBox<int> QuantLevelAmountTextBox = new CustomTextBox<int>(10);
+
+        //<--LABELS AND TEXTBOXES OF THE RESULTS TAB-->
+        private readonly Label AverageLabel = new Label { Content = "Wartość średnia:" };
+        private readonly CustomTextBox<double> AverageTextBox = new CustomTextBox<double>(true);
+
+        private readonly Label AbsAverageLabel = new Label { Content = "Wartość średnia bezwzględna:" };
+        private readonly CustomTextBox<double> AbsAverageTextBox = new CustomTextBox<double>(true);
+
+        private readonly Label RootMeanSquareLabel = new Label { Content = "Wartość skuteczna:" };
+        private readonly CustomTextBox<double> RootMeanSquareTextBox = new CustomTextBox<double>(true);
+
+        private readonly Label VariationLabel = new Label { Content = "Wariacja:" };
+        private readonly CustomTextBox<double> VariationTextBox= new CustomTextBox<double>(true);
+
+        private readonly Label AveragePowerLabel = new Label { Content = "Moc średnia:" };
+        private readonly CustomTextBox<double> AveragePowerTextBox = new CustomTextBox<double>(true);
+
+        //<--LABELS AND TEXTBOXES OF THE RESULTS TAB-->
+        private readonly Label MeanSquareErrorLabel = new Label { Content = "Błąd średniokwadratowy:" };
+        private readonly CustomTextBox<double> MeanSquareErrorTextBox = new CustomTextBox<double>(true);
+
+        private readonly Label RatioLabel = new Label { Content = "Stosunek sygnał-szum:" };
+        private readonly CustomTextBox<double> RatioTextBox = new CustomTextBox<double>(true);
+
+        private readonly Label MaxRatioLabel = new Label { Content = "Maksymalny stosunek sygnał-szum:" };
+        private readonly CustomTextBox<double> MaxRatioTextBox = new CustomTextBox<double>(true);
+
+        private readonly Label MaxDiffrenceLabel = new Label { Content = "Maksymalna różnica:" };
+        private readonly CustomTextBox<double> MaxDiffrenceTextBox = new CustomTextBox<double>(true);
         #endregion
 
         public ICommand GenerateButtonPressed { get; }
@@ -77,6 +107,8 @@ namespace CPS.VM
         public SeriesCollection SincReconstructionChartSeries { get; set; }
         public ObservableCollection<Control> SignalParametersCollection { get; set; }
         public ObservableCollection<Control> AdditionalParametersCollection { get; set; }
+        public ObservableCollection<Control> ResultsCollection { get; set; }
+        public ObservableCollection<Control> SincResultsCollection { get; set; }
         public int SelectedSignal
         {
             get { return selectedSignal; }
@@ -91,19 +123,12 @@ namespace CPS.VM
         {
             SignalParametersCollection = new ObservableCollection<Control>();
             AdditionalParametersCollection = new ObservableCollection<Control>();
+            ResultsCollection = new ObservableCollection<Control>();
+            SincResultsCollection = new ObservableCollection<Control>();
+
             NormalChartSeries = new SeriesCollection
             {
-                new LineSeries
-                {
-                    Title = "Sygnały przedstawiane liniowo",
-                    PointGeometry = null
-                },
-                new ScatterSeries
-                {
-                    Title = "Sygnały przedstawiane punktowo",
-                    PointGeometry = DefaultGeometries.Circle,
-                    StrokeThickness = 2
-                }
+                new LineSeries()
             };
             HistogramChartSeries = new SeriesCollection
             {
@@ -143,7 +168,8 @@ namespace CPS.VM
                 },
                 new LineSeries
                 {
-                    Title = "Sygnał oryginalny"
+                    Title = "Sygnał oryginalny",
+                    Fill = Brushes.Transparent
                 }
             };
 
@@ -156,6 +182,7 @@ namespace CPS.VM
         {
             GenerateParameters(0);
 
+            #region ADDING ADDITIONAL PARAMETERS CONTROLS TO THE TAB
             AdditionalParametersCollection.Add(SamplingFrequencyLabel);
             AdditionalParametersCollection.Add(SamplingFrequencyTextBox);
 
@@ -164,8 +191,40 @@ namespace CPS.VM
 
             AdditionalParametersCollection.Add(QuantLevelAmountLabel);
             AdditionalParametersCollection.Add(QuantLevelAmountTextBox);
+            #endregion
+
+            #region ADDING RESULTS CONTROLS TO THE TAB
+            ResultsCollection.Add(AverageLabel);
+            ResultsCollection.Add(AverageTextBox);
+
+            ResultsCollection.Add(AbsAverageLabel);
+            ResultsCollection.Add(AbsAverageTextBox);
+
+            ResultsCollection.Add(RootMeanSquareLabel);
+            ResultsCollection.Add(RootMeanSquareTextBox);
+
+            ResultsCollection.Add(VariationLabel);
+            ResultsCollection.Add(VariationTextBox);
+
+            ResultsCollection.Add(AveragePowerLabel);
+            ResultsCollection.Add(AveragePowerTextBox);
+            #endregion
+
+            #region ADDING SINC SERULTS CONTROLS TO THE TAB
+            SincResultsCollection.Add(MeanSquareErrorLabel);
+            SincResultsCollection.Add(MeanSquareErrorTextBox);
+
+            SincResultsCollection.Add(RatioLabel);
+            SincResultsCollection.Add(RatioTextBox);
+
+            SincResultsCollection.Add(MaxRatioLabel);
+            SincResultsCollection.Add(MaxRatioTextBox);
+
+            SincResultsCollection.Add(MaxDiffrenceLabel);
+            SincResultsCollection.Add(MaxDiffrenceTextBox);
+            #endregion
         }
-             
+
         public void GenerateParameters(int signalTypeChoice)
         {
             SignalParametersCollection.Clear();
@@ -192,8 +251,8 @@ namespace CPS.VM
                     SignalParametersCollection.Add(MeanLabel);
                     SignalParametersCollection.Add(MeanTextBox);
 
-                    SignalParametersCollection.Add(VarianceLabel);
-                    SignalParametersCollection.Add(VarianceTextBox);
+                    SignalParametersCollection.Add(DeviationLabel);
+                    SignalParametersCollection.Add(DeviationTextBox);
                     break;
                 case 2:
                 case 3:
@@ -245,8 +304,24 @@ namespace CPS.VM
 
         public void Generate()
         {
-            NormalChartSeries[0].Values = new ChartValues<ObservablePoint>();
-            NormalChartSeries[1].Values = new ChartValues<ObservablePoint>();
+            if (selectedSignal < 9)
+            {
+                NormalChartSeries[0] = new LineSeries
+                {
+                    Title = "Sygnały przedstawiane liniowo",
+                    PointGeometry = null,
+                    Fill = Brushes.Transparent
+                };
+            }
+            else
+            {
+                NormalChartSeries[0] = new ScatterSeries
+                {
+                    Title = "Sygnały przedstawiane punktowo",
+                    PointGeometry = DefaultGeometries.Circle,
+                    StrokeThickness = 2
+                };
+            }
 
             switch (SelectedSignal)
             {
@@ -255,8 +330,8 @@ namespace CPS.VM
                     SamplingChartSeries[0].Values = model.GetUniformDistributionNoise(SamplingFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), MinimumTextBox.GetValue(), MaximumTextBox.GetValue());
                     break;
                 case 1:
-                    NormalChartSeries[0].Values = model.GetGaussianNoise(SignalFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), MeanTextBox.GetValue(), VarianceTextBox.GetValue());
-                    SamplingChartSeries[0].Values = model.GetGaussianNoise(SamplingFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), MeanTextBox.GetValue(), VarianceTextBox.GetValue());
+                    NormalChartSeries[0].Values = model.GetGaussianNoise(SignalFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), MeanTextBox.GetValue(), DeviationTextBox.GetValue());
+                    SamplingChartSeries[0].Values = model.GetGaussianNoise(SamplingFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), MeanTextBox.GetValue(), DeviationTextBox.GetValue());
                     break;
                 case 2:
                     NormalChartSeries[0].Values = model.GetSinSignal(SignalFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), FrequencyTextBox.GetValue(), StartTimetextBox.GetValue());
@@ -287,23 +362,23 @@ namespace CPS.VM
                     SamplingChartSeries[0].Values = model.GetJumpSignal(SamplingFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), JumpTimeTextBox.GetValue(), StartTimetextBox.GetValue());
                     break;
                 case 9:
-                    NormalChartSeries[1].Values = model.GetSingleImpulseSignal(SignalFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), JumpTimeTextBox.GetValue(), StartTimetextBox.GetValue());
+                    NormalChartSeries[0].Values = model.GetSingleImpulseSignal(SignalFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), JumpTimeTextBox.GetValue(), StartTimetextBox.GetValue());
                     SamplingChartSeries[0].Values = model.GetSingleImpulseSignal(SamplingFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), JumpTimeTextBox.GetValue(), StartTimetextBox.GetValue());
                     break;
                 case 10:
-                    NormalChartSeries[1].Values = model.GetImpulseNoise(SignalFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), ImpulseProbabilityTextBox.GetValue());
+                    NormalChartSeries[0].Values = model.GetImpulseNoise(SignalFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), ImpulseProbabilityTextBox.GetValue());
                     SamplingChartSeries[0].Values = model.GetImpulseNoise(SamplingFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), ImpulseProbabilityTextBox.GetValue());
                     break;
             }
 
             if (SelectedSignal >= 9)
             {
-                HistogramLabels = Logic.GetHistogramLabels((ChartValues<ObservablePoint>)NormalChartSeries[1].Values);
-                HistogramChartSeries[0].Values = model.GetHistogram((ChartValues<ObservablePoint>)NormalChartSeries[1].Values);
+                HistogramLabels = SignalLogics.GetHistogramLabels((ChartValues<ObservablePoint>)NormalChartSeries[0].Values);
+                HistogramChartSeries[0].Values = model.GetHistogram((ChartValues<ObservablePoint>)NormalChartSeries[0].Values);
             }
             else
             {
-                HistogramLabels = Logic.GetHistogramLabels((ChartValues<ObservablePoint>)NormalChartSeries[0].Values);
+                HistogramLabels = SignalLogics.GetHistogramLabels((ChartValues<ObservablePoint>)NormalChartSeries[0].Values);
                 HistogramChartSeries[0].Values = model.GetHistogram((ChartValues<ObservablePoint>)NormalChartSeries[0].Values);
             }
 
@@ -313,6 +388,17 @@ namespace CPS.VM
 
             SincReconstructionChartSeries[0].Values = model.GetSincReconstruction(ReconstructionFrequencyTextBox.GetValue(), SamplingFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), (ChartValues<ObservablePoint>)SamplingChartSeries[0].Values);
             SincReconstructionChartSeries[1].Values = (ChartValues<ObservablePoint>)SamplingChartSeries[0].Values;
+
+            AverageTextBox.Text = ResultLogics.GetAverage((ChartValues<ObservablePoint>)NormalChartSeries[0].Values).ToString();
+            AbsAverageTextBox.Text = ResultLogics.GetAbsAverage((ChartValues<ObservablePoint>)NormalChartSeries[0].Values).ToString();
+            VariationTextBox.Text = ResultLogics.GetVariation((ChartValues<ObservablePoint>)NormalChartSeries[0].Values).ToString();
+            AveragePowerTextBox.Text = ResultLogics.GetAveragePower((ChartValues<ObservablePoint>)NormalChartSeries[0].Values).ToString();
+            RootMeanSquareTextBox.Text = ResultLogics.GetRootMeanSquare((ChartValues<ObservablePoint>)NormalChartSeries[0].Values).ToString();
+
+            MeanSquareErrorTextBox.Text = ResultLogics.GetMeanSquareError((ChartValues<ObservablePoint>)SincReconstructionChartSeries[0].Values, (ChartValues<ObservablePoint>)SamplingChartSeries[0].Values).ToString();
+            RatioTextBox.Text = ResultLogics.GetRatio((ChartValues<ObservablePoint>)SincReconstructionChartSeries[0].Values, (ChartValues<ObservablePoint>)SamplingChartSeries[0].Values).ToString();
+            MaxRatioTextBox.Text = ResultLogics.GetMaxRatio((ChartValues<ObservablePoint>)SincReconstructionChartSeries[0].Values, (ChartValues<ObservablePoint>)SamplingChartSeries[0].Values).ToString();
+            MaxDiffrenceTextBox.Text = ResultLogics.GetMaxDiffrence((ChartValues<ObservablePoint>)SincReconstructionChartSeries[0].Values, (ChartValues<ObservablePoint>)SamplingChartSeries[0].Values).ToString();
         }
     }
 }

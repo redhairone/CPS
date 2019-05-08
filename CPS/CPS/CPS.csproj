@@ -64,7 +64,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Logics\Logic.cs" />
+    <Compile Include="Logics\MathLogics.cs" />
+    <Compile Include="Logics\SignalLogics.cs" />
+    <Compile Include="Logics\ResultLogics.cs" />
     <Compile Include="M\Model.cs" />
     <Compile Include="VM\RelayCommand.cs" />
     <Compile Include="VM\ViewModel.cs" />
