@@ -66,6 +66,9 @@ namespace CPS.VM
         private readonly Label QuantLevelAmountLabel = new Label { Content = "Poziomy kwantyzacji:" };
         private readonly CustomTextBox<int> QuantLevelAmountTextBox = new CustomTextBox<int>(10);
 
+        private readonly Label SeenSamplesLabel = new Label { Content = "Liczba rozważanych próbek:" };
+        private readonly CustomTextBox<int> SeenSamplesTextBox = new CustomTextBox<int>(0);
+
         //<--LABELS AND TEXTBOXES OF THE RESULTS TAB-->
         private readonly Label AverageLabel = new Label { Content = "Wartość średnia:" };
         private readonly CustomTextBox<double> AverageTextBox = new CustomTextBox<double>(true);
@@ -82,7 +85,7 @@ namespace CPS.VM
         private readonly Label AveragePowerLabel = new Label { Content = "Moc średnia:" };
         private readonly CustomTextBox<double> AveragePowerTextBox = new CustomTextBox<double>(true);
 
-        //<--LABELS AND TEXTBOXES OF THE RESULTS TAB-->
+        //<--LABELS AND TEXTBOXES OF THE SINC RESULTS TAB-->
         private readonly Label MeanSquareErrorLabel = new Label { Content = "Błąd średniokwadratowy:" };
         private readonly CustomTextBox<double> MeanSquareErrorTextBox = new CustomTextBox<double>(true);
 
@@ -203,6 +206,9 @@ namespace CPS.VM
 
             AdditionalParametersCollection.Add(QuantLevelAmountLabel);
             AdditionalParametersCollection.Add(QuantLevelAmountTextBox);
+
+            AdditionalParametersCollection.Add(SeenSamplesLabel);
+            AdditionalParametersCollection.Add(SeenSamplesTextBox);
             #endregion
 
             #region ADDING RESULTS CONTROLS TO THE TAB
@@ -398,7 +404,7 @@ namespace CPS.VM
 
             ZeroHoldChartSeries[0].Values = (ChartValues<ObservablePoint>)SamplingChartSeries[0].Values;
 
-            SincReconstructionChartSeries[0].Values = model.GetSincReconstruction(ReconstructionFrequencyTextBox.GetValue(), SamplingFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), (ChartValues<ObservablePoint>)SamplingChartSeries[0].Values);
+            SincReconstructionChartSeries[0].Values = model.GetSincReconstruction(ReconstructionFrequencyTextBox.GetValue(), SamplingFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), (ChartValues<ObservablePoint>)SamplingChartSeries[0].Values, SeenSamplesTextBox.GetValue());
             SincReconstructionChartSeries[1].Values = (ChartValues<ObservablePoint>)SamplingChartSeries[0].Values;
 
             AverageTextBox.Text = ResultLogics.GetAverage((ChartValues<ObservablePoint>)NormalChartSeries[0].Values).ToString();

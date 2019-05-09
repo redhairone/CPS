@@ -156,16 +156,26 @@ namespace CPS.M
             return result;
         }
 
-        internal IChartValues GetSincReconstruction(int reconstructionFrequency, int samplingFrequency, double timeDuration, ChartValues<ObservablePoint> samples)
+        internal IChartValues GetSincReconstruction(int reconstructionFrequency, int samplingFrequency, double timeDuration, ChartValues<ObservablePoint> samples, int seenSamplesAmount)
         {
             double[] xValues = Logics.SignalLogics.GetTimeValues(reconstructionFrequency, timeDuration);
             ChartValues<ObservablePoint> result = new ChartValues<ObservablePoint>();
-
-            foreach(var item in xValues)
+            
+            if(seenSamplesAmount != 0)
             {
-                result.Add(new ObservablePoint { X = item, Y = Logics.SignalLogics.GetSincReconstructionValue(samples, item, samplingFrequency) });
+                foreach (var item in xValues)
+                {
+                    result.Add(new ObservablePoint { X = item, Y = Logics.SignalLogics.GetSincReconstructionValue(MathLogics.SegregateSamples(samples, seenSamplesAmount, item), item, samplingFrequency) });
+                }
             }
-
+            else
+            {
+                foreach (var item in xValues)
+                {
+                    result.Add(new ObservablePoint { X = item, Y = Logics.SignalLogics.GetSincReconstructionValue(samples, item, samplingFrequency) });
+                }
+            }
+            
             return result;
         }
 

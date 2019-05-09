@@ -61,5 +61,10 @@ namespace CPS.Logics
 
             return result;
         }
+
+        internal static IEnumerable<ObservablePoint> SegregateSamples(ChartValues<ObservablePoint> samples, int seenSamplesAmount, double time)
+        {
+            return samples.OrderBy(s => (Math.Abs(s.X - time))).Take(seenSamplesAmount*2);
+        }
     }
 }
