@@ -53,7 +53,7 @@ namespace CPS.Logics
 
             foreach(var item in values)
             {
-                for(int j = 0; j < (size/values.Count + 1); j++)
+                for(int j = 0; j < size/values.Count + 1; j++)
                 {
                     result.Add( new ObservablePoint { X = item.X, Y = item.Y });
                 }
@@ -65,6 +65,18 @@ namespace CPS.Logics
         internal static IEnumerable<ObservablePoint> SegregateSamples(ChartValues<ObservablePoint> samples, int seenSamplesAmount, double time)
         {
             return samples.OrderBy(s => (Math.Abs(s.X - time))).Take(seenSamplesAmount*2);
+        }
+
+        internal static ChartValues<ObservablePoint> GetProperSignal(ChartValues<ObservablePoint> sincValues, Func<double, double> fun)
+        {
+            ChartValues<ObservablePoint> result = new ChartValues<ObservablePoint>();
+
+            foreach (var item in sincValues)
+            {
+                result.Add(new ObservablePoint { X = item.X, Y = fun(item.X) });
+            }
+
+            return result;
         }
     }
 }

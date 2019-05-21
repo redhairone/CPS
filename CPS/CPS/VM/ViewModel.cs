@@ -17,7 +17,7 @@ namespace CPS.VM
 
         #region THE_LABELS_AND_THE_TEXTBOXES
         //<--LABELS AND TEXTBOXES OF THE SIGNAL PARAMETERS TAB-->
-        private readonly Label SignalFrequencyLabel = new Label { Content = "Częstotliwość sygnału (HZ):" };
+        private readonly Label SignalFrequencyLabel = new Label { Content = "Częstotliwość próbkowania sygnały analogowego (HZ):" };
         private readonly CustomTextBox<int> SignalFrequencyTextBox = new CustomTextBox<int>(100);
 
         private readonly Label TimeDurationLabel = new Label { Content = "Czas trwania:" };
@@ -160,6 +160,12 @@ namespace CPS.VM
                 new StepLineSeries
                 {
                     Title = "Kwantyzacja równomierna z obcięciem"
+                },
+                new LineSeries
+                {
+                    Title = "Sygnał oryginalny",
+                    PointGeometry = null,
+                    Fill = Brushes.Transparent
                 }
             };
             ZeroHoldChartSeries = new SeriesCollection
@@ -167,6 +173,12 @@ namespace CPS.VM
                 new StepLineSeries
                 {
                     Title = "Ekstrapolacja zerowego rzędu"
+                },
+                new LineSeries
+                {
+                    Title = "Sygnał oryginalny",
+                    PointGeometry = null,
+                    Fill = Brushes.Transparent
                 }
             };
             SincReconstructionChartSeries = new SeriesCollection
@@ -178,6 +190,7 @@ namespace CPS.VM
                 new LineSeries
                 {
                     Title = "Sygnał oryginalny",
+                    PointGeometry = null,
                     Fill = Brushes.Transparent
                 }
             };
@@ -322,12 +335,14 @@ namespace CPS.VM
 
         public void Generate()
         {
+            ChartValues<ObservablePoint> here = new ChartValues<ObservablePoint>(), here1 = new ChartValues<ObservablePoint>();
+
             if (selectedSignal < 9)
             {
                 NormalChartSeries[0] = new LineSeries
                 {
                     Title = "Sygnały przedstawiane liniowo",
-                    PointGeometry = null,
+                    PointGeometry = DefaultGeometries.Circle,
                     Fill = Brushes.Transparent
                 };
             }
@@ -346,46 +361,61 @@ namespace CPS.VM
                 case 0:
                     NormalChartSeries[0].Values = model.GetUniformDistributionNoise(SignalFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), MinimumTextBox.GetValue(), MaximumTextBox.GetValue());
                     SamplingChartSeries[0].Values = model.GetUniformDistributionNoise(SamplingFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), MinimumTextBox.GetValue(), MaximumTextBox.GetValue());
+                    here = (ChartValues<ObservablePoint>)model.GetUniformDistributionNoise(ReconstructionFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), MinimumTextBox.GetValue(), MaximumTextBox.GetValue());
+                    here1 = (ChartValues<ObservablePoint>)model.GetUniformDistributionNoise(ReconstructionFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), MinimumTextBox.GetValue(), MaximumTextBox.GetValue());
                     break;
                 case 1:
                     NormalChartSeries[0].Values = model.GetGaussianNoise(SignalFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), MeanTextBox.GetValue(), DeviationTextBox.GetValue());
                     SamplingChartSeries[0].Values = model.GetGaussianNoise(SamplingFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), MeanTextBox.GetValue(), DeviationTextBox.GetValue());
+                    here = (ChartValues<ObservablePoint>)model.GetGaussianNoise(ReconstructionFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), MeanTextBox.GetValue(), DeviationTextBox.GetValue());
+                    here1 = (ChartValues<ObservablePoint>)model.GetGaussianNoise(ReconstructionFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), MeanTextBox.GetValue(), DeviationTextBox.GetValue());
                     break;
                 case 2:
                     NormalChartSeries[0].Values = model.GetSinSignal(SignalFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), FrequencyTextBox.GetValue(), StartTimetextBox.GetValue());
                     SamplingChartSeries[0].Values = model.GetSinSignal(SamplingFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), FrequencyTextBox.GetValue(), StartTimetextBox.GetValue());
+                    here = (ChartValues<ObservablePoint>)model.GetSinSignal(ReconstructionFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), FrequencyTextBox.GetValue(), StartTimetextBox.GetValue());
+                    here1 = (ChartValues<ObservablePoint>)model.GetSinSignal(ReconstructionFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), FrequencyTextBox.GetValue(), StartTimetextBox.GetValue());
                     break;
                 case 3:
                     NormalChartSeries[0].Values = model.GetSinAbsSignal(SignalFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), FrequencyTextBox.GetValue(), StartTimetextBox.GetValue());
                     SamplingChartSeries[0].Values = model.GetSinAbsSignal(SamplingFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), FrequencyTextBox.GetValue(), StartTimetextBox.GetValue());
+                    here = (ChartValues<ObservablePoint>)model.GetSinAbsSignal(ReconstructionFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), FrequencyTextBox.GetValue(), StartTimetextBox.GetValue());
+                    here1 = (ChartValues<ObservablePoint>)model.GetSinAbsSignal(ReconstructionFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), FrequencyTextBox.GetValue(), StartTimetextBox.GetValue());
                     break;
                 case 4:
                     NormalChartSeries[0].Values = model.GetSinDoubleAbsSignal(SignalFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), FrequencyTextBox.GetValue(), StartTimetextBox.GetValue());
                     SamplingChartSeries[0].Values = model.GetSinDoubleAbsSignal(SamplingFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), FrequencyTextBox.GetValue(), StartTimetextBox.GetValue());
+                    here = (ChartValues<ObservablePoint>)model.GetSinDoubleAbsSignal(ReconstructionFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), FrequencyTextBox.GetValue(), StartTimetextBox.GetValue());
                     break;
                 case 5:
                     NormalChartSeries[0].Values = model.GetRectangularSignal(SignalFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), PeriodTextBox.GetValue(), StartTimetextBox.GetValue(), DutyCycleTextBox.GetValue());
                     SamplingChartSeries[0].Values = model.GetRectangularSignal(SamplingFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), PeriodTextBox.GetValue(), StartTimetextBox.GetValue(), DutyCycleTextBox.GetValue());
+                    here = (ChartValues<ObservablePoint>)model.GetRectangularSignal(ReconstructionFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), PeriodTextBox.GetValue(), StartTimetextBox.GetValue(), DutyCycleTextBox.GetValue());
                     break;
                 case 6:
                     NormalChartSeries[0].Values = model.GetSymmetricRectangularSignal(SignalFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), PeriodTextBox.GetValue(), StartTimetextBox.GetValue(), DutyCycleTextBox.GetValue());
                     SamplingChartSeries[0].Values = model.GetSymmetricRectangularSignal(SamplingFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), PeriodTextBox.GetValue(), StartTimetextBox.GetValue(), DutyCycleTextBox.GetValue());
+                    here = (ChartValues<ObservablePoint>)model.GetSymmetricRectangularSignal(ReconstructionFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), PeriodTextBox.GetValue(), StartTimetextBox.GetValue(), DutyCycleTextBox.GetValue());
                     break;
                 case 7:
                     NormalChartSeries[0].Values = model.GetTriangularSignal(SignalFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), PeriodTextBox.GetValue(), StartTimetextBox.GetValue(), DutyCycleTextBox.GetValue());
                     SamplingChartSeries[0].Values = model.GetTriangularSignal(SamplingFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), PeriodTextBox.GetValue(), StartTimetextBox.GetValue(), DutyCycleTextBox.GetValue());
+                    here = (ChartValues<ObservablePoint>)model.GetTriangularSignal(ReconstructionFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), PeriodTextBox.GetValue(), StartTimetextBox.GetValue(), DutyCycleTextBox.GetValue());
                     break;
                 case 8:
                     NormalChartSeries[0].Values = model.GetJumpSignal(SignalFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), JumpTimeTextBox.GetValue(), StartTimetextBox.GetValue());
                     SamplingChartSeries[0].Values = model.GetJumpSignal(SamplingFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), JumpTimeTextBox.GetValue(), StartTimetextBox.GetValue());
+                    here = (ChartValues<ObservablePoint>)model.GetJumpSignal(ReconstructionFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), JumpTimeTextBox.GetValue(), StartTimetextBox.GetValue());
                     break;
                 case 9:
                     NormalChartSeries[0].Values = model.GetSingleImpulseSignal(SignalFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), JumpTimeTextBox.GetValue(), StartTimetextBox.GetValue());
                     SamplingChartSeries[0].Values = model.GetSingleImpulseSignal(SamplingFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), JumpTimeTextBox.GetValue(), StartTimetextBox.GetValue());
+                    here = (ChartValues<ObservablePoint>)model.GetSingleImpulseSignal(ReconstructionFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), JumpTimeTextBox.GetValue(), StartTimetextBox.GetValue());
                     break;
                 case 10:
                     NormalChartSeries[0].Values = model.GetImpulseNoise(SignalFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), ImpulseProbabilityTextBox.GetValue());
                     SamplingChartSeries[0].Values = model.GetImpulseNoise(SamplingFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), ImpulseProbabilityTextBox.GetValue());
+                    here = (ChartValues<ObservablePoint>)model.GetImpulseNoise(ReconstructionFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), AmplitudeTextBox.GetValue(), ImpulseProbabilityTextBox.GetValue());
                     break;
             }
 
@@ -401,11 +431,13 @@ namespace CPS.VM
             }
 
             QuantChartSeries[0].Values = model.GetQuant((ChartValues<ObservablePoint>)SamplingChartSeries[0].Values, QuantLevelAmountTextBox.GetValue());
+            QuantChartSeries[1].Values = (ChartValues<ObservablePoint>)NormalChartSeries[0].Values;
 
             ZeroHoldChartSeries[0].Values = (ChartValues<ObservablePoint>)SamplingChartSeries[0].Values;
+            ZeroHoldChartSeries[1].Values = (ChartValues<ObservablePoint>)NormalChartSeries[0].Values;
 
             SincReconstructionChartSeries[0].Values = model.GetSincReconstruction(ReconstructionFrequencyTextBox.GetValue(), SamplingFrequencyTextBox.GetValue(), TimeDurationTextBox.GetValue(), (ChartValues<ObservablePoint>)SamplingChartSeries[0].Values, SeenSamplesTextBox.GetValue());
-            SincReconstructionChartSeries[1].Values = (ChartValues<ObservablePoint>)SamplingChartSeries[0].Values;
+            SincReconstructionChartSeries[1].Values = (ChartValues<ObservablePoint>)NormalChartSeries[0].Values;
 
             AverageTextBox.Text = ResultLogics.GetAverage((ChartValues<ObservablePoint>)NormalChartSeries[0].Values).ToString();
             AbsAverageTextBox.Text = ResultLogics.GetAbsAverage((ChartValues<ObservablePoint>)NormalChartSeries[0].Values).ToString();
@@ -413,10 +445,13 @@ namespace CPS.VM
             AveragePowerTextBox.Text = ResultLogics.GetAveragePower((ChartValues<ObservablePoint>)NormalChartSeries[0].Values).ToString();
             RootMeanSquareTextBox.Text = ResultLogics.GetRootMeanSquare((ChartValues<ObservablePoint>)NormalChartSeries[0].Values).ToString();
 
-            MeanSquareErrorTextBox.Text = ResultLogics.GetMeanSquareError((ChartValues<ObservablePoint>)SincReconstructionChartSeries[0].Values, (ChartValues<ObservablePoint>)SamplingChartSeries[0].Values).ToString();
-            RatioTextBox.Text = ResultLogics.GetRatio((ChartValues<ObservablePoint>)SincReconstructionChartSeries[0].Values, (ChartValues<ObservablePoint>)SamplingChartSeries[0].Values).ToString();
-            MaxRatioTextBox.Text = ResultLogics.GetMaxRatio((ChartValues<ObservablePoint>)SincReconstructionChartSeries[0].Values, (ChartValues<ObservablePoint>)SamplingChartSeries[0].Values).ToString();
-            MaxDiffrenceTextBox.Text = ResultLogics.GetMaxDiffrence((ChartValues<ObservablePoint>)SincReconstructionChartSeries[0].Values, (ChartValues<ObservablePoint>)SamplingChartSeries[0].Values).ToString();
+            MeanSquareErrorTextBox.Text = ResultLogics.GetMeanSquareError((ChartValues<ObservablePoint>)SincReconstructionChartSeries[0].Values, here).ToString();
+
+            //DLA KWANTY
+            RatioTextBox.Text = ResultLogics.GetRatio((ChartValues<ObservablePoint>)QuantChartSeries[0].Values, (ChartValues<ObservablePoint>)SamplingChartSeries[0].Values).ToString();
+            MaxRatioTextBox.Text = ResultLogics.GetMaxRatio((ChartValues<ObservablePoint>)QuantChartSeries[0].Values, (ChartValues<ObservablePoint>)SamplingChartSeries[0].Values).ToString();
+
+            MaxDiffrenceTextBox.Text = ResultLogics.GetMaxDiffrence((ChartValues<ObservablePoint>)SincReconstructionChartSeries[0].Values, here).ToString();
         }
 
         public void Save()

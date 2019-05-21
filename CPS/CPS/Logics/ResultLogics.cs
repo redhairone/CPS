@@ -39,7 +39,7 @@ namespace CPS.Logics
         internal static double GetMeanSquareError(ChartValues<ObservablePoint> sincValues, ChartValues<ObservablePoint> signalValues)
         {
 
-            ChartValues<ObservablePoint> valuesOne, valuesTwo;
+            ChartValues<ObservablePoint> valuesOne, valuesTwo, a;
             if(sincValues.Count > signalValues.Count)
             {
                 valuesOne = sincValues;
@@ -56,6 +56,9 @@ namespace CPS.Logics
                 valuesTwo = sincValues;
             }
 
+            if (valuesOne.Count > valuesTwo.Count) a = valuesTwo;
+            else a = valuesOne;
+
             double fraction = 1.0 / valuesOne.Count, sum = 0;
 
             for(int i = 0; i < valuesOne.Count; i++)
@@ -68,7 +71,7 @@ namespace CPS.Logics
 
         internal static double GetRatio(ChartValues<ObservablePoint> sincValues, ChartValues<ObservablePoint> signalValues)
         {
-            ChartValues<ObservablePoint> sinc, signal;
+            ChartValues<ObservablePoint> sinc, signal, a;
             if (sincValues.Count > signalValues.Count)
             {
                 sinc = sincValues;
@@ -85,9 +88,12 @@ namespace CPS.Logics
                 sinc = sincValues;
             }
 
+            if (signal.Count > sinc.Count) a = sinc;
+            else a = signal;
+
             double numerator = 0, denominator = 0;
             
-            for(int i = 0; i < sinc.Count; i++)
+            for(int i = 0; i < a.Count; i++)
             {
                 numerator += Math.Pow(signal[i].Y, 2);
                 denominator += Math.Pow(signal[i].Y - sinc[i].Y, 2);
@@ -123,7 +129,7 @@ namespace CPS.Logics
 
         internal static double GetMaxDiffrence(ChartValues<ObservablePoint> sincValues, ChartValues<ObservablePoint> signalValues)
         {
-            ChartValues<ObservablePoint> sinc, signal;
+            ChartValues<ObservablePoint> sinc, signal, a;
             if (sincValues.Count > signalValues.Count)
             {
                 sinc = sincValues;
@@ -140,9 +146,12 @@ namespace CPS.Logics
                 sinc = sincValues;
             }
 
+            if (signal.Count > sinc.Count) a = sinc;
+            else a = signal;
+
             double diff = Math.Abs(sinc[0].Y - signal[0].Y);
 
-            for (int i = 1; i < sinc.Count; i++)
+            for (int i = 1; i < a.Count; i++)
             {
                 if (diff < Math.Abs(sinc[i].Y - signal[i].Y))
                 {
@@ -152,5 +161,6 @@ namespace CPS.Logics
 
             return Math.Round(diff, 4);
         }
+
     }
 }

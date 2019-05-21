@@ -212,7 +212,7 @@ namespace CPS.M
         {
             ChartValues<ObservablePoint> result = new ChartValues<ObservablePoint>();
             double[] minMax = Logics.MathLogics.GetMinMax(samples), yValues = new double[howManyLevels];
-            double step = Math.Abs(minMax[1] - minMax[0]) / howManyLevels;
+            double step = Math.Abs(minMax[1] - minMax[0]) / (howManyLevels - 1);
             int closestIndex = 0;
 
             for(int i = 0; i < howManyLevels; i++)
