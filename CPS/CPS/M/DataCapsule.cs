@@ -1,4 +1,5 @@
-﻿using LiveCharts;
+﻿using CPS.Logics;
+using LiveCharts;
 using LiveCharts.Defaults;
 using System;
 using System.Collections.Generic;
@@ -92,6 +93,32 @@ namespace CPS.M
             }
             else throw new Exception("The amounts of the points are not equal.");
             return this;
+        }
+
+        internal DataCapsule Weave(DataCapsule dataCapsule)
+        {
+            ChartValues<ObservablePoint> weaveValues = new ChartValues<ObservablePoint>();
+
+            double frequency = (this.XValues[this.XValues.Count - 1] + dataCapsule.XValues[dataCapsule.XValues.Count - 1]) / (this.XValues.Count + dataCapsule.XValues.Count - 1);
+            int counter = 0;
+            double[] time = SignalLogics.GetTimeValues(frequency, this.XValues[this.XValues.Count - 1] + dataCapsule.XValues[dataCapsule.XValues.Count - 1]);
+
+            for(int i = 0; i < this.XValues.Count + dataCapsule.XValues.Count; i++)
+            {
+                double sum = 0;
+                var kmin = i >= this.XValues.Count - 1 ? i - (this.XValues.Count - 1) : 0;
+                var kmax = i < dataCapsule.XValues.Count - 1 ? i : dataCapsule.XValues.Count - 1;
+
+                for(int j = kmin; j < kmax; j++)
+                {
+                    sum += dataCapsule.YValues[j] * this.YValues[i - j];
+                }
+
+                weaveValues.Add(new ObservablePoint { X = time[counter], Y = sum });
+                counter++;
+            }
+
+            return new DataCapsule(weaveValues);
         }
     }
 }

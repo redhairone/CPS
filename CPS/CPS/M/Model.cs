@@ -271,5 +271,12 @@ namespace CPS.M
 
             return loaded[0].Divide(loaded[1]).GetValues();
         }
+
+        internal IChartValues Weave()
+        {
+            DataCapsule[] loaded = SerializationLogics.LoadFiles();
+
+            return loaded[0].Weave(loaded[1]).GetValues();
+        }
     }
 }

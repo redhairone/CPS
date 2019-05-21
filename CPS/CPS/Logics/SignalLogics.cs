@@ -14,13 +14,27 @@ namespace CPS.Logics
 
         public static double[] GetTimeValues(int signalFrequency, double timeDuration, double startTime = 0)
         {
-            Console.WriteLine((int)(timeDuration / (1.0 / signalFrequency) + 1.0));
             double[] result = new double[(int)(timeDuration/(1.0 / signalFrequency) + 1.0)];
             double step = 1.0 / signalFrequency;
 
             result[0] = startTime;
 
             for(int i = 1; i < result.Length; i++)
+            {
+                result[i] = result[i - 1] + step;
+            }
+
+            return result;
+        }
+
+        public static double[] GetTimeValues(double signalFrequency, double timeDuration, double startTime = 0)
+        {
+            double[] result = new double[(int)(timeDuration / signalFrequency + 1.0)];
+            double step = signalFrequency;
+
+            result[0] = startTime;
+
+            for (int i = 1; i < result.Length; i++)
             {
                 result[i] = result[i - 1] + step;
             }
