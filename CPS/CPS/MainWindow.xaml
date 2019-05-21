@@ -31,7 +31,7 @@
                 </MenuItem>
                 <MenuItem Header="Akcja operacja">
                     <MenuItem Header="Splot" Command="{Binding WeaveButtonPressed}"/>
-                    <MenuItem Header="Odejmowanie" Command="{Binding SubtractionButtonPressed}"/>
+                    <MenuItem Header="Korelacja" Command="{Binding CorrelationButtonPressed}"/>
                     <MenuItem Header="Mnożenie" Command="{Binding MultiplicationButtonPressed}"/>
                     <MenuItem Header="Dzielenie" Command="{Binding DivisionButtonPressed}"/>
                 </MenuItem>

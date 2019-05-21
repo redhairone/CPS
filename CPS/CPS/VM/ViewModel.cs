@@ -107,6 +107,7 @@ namespace CPS.VM
         public ICommand MultiplicationButtonPressed { get; }
         public ICommand DivisionButtonPressed { get; }
         public ICommand WeaveButtonPressed { get; }
+        public ICommand CorrelationButtonPressed { get; }
 
         public SeriesCollection NormalChartSeries { get; set; }
         public SeriesCollection SamplingChartSeries { get; set; }
@@ -204,6 +205,7 @@ namespace CPS.VM
             MultiplicationButtonPressed = new RelayCommand(Multiply);
             DivisionButtonPressed = new RelayCommand(Divide);
             WeaveButtonPressed = new RelayCommand(Weave);
+            CorrelationButtonPressed = new RelayCommand(Correlation);
 
             Config();
         }
@@ -490,6 +492,11 @@ namespace CPS.VM
         public void Weave()
         {
             NormalChartSeries[0].Values = model.Weave();
+        }
+
+        public void Correlation()
+        {
+            NormalChartSeries[0].Values = model.Correlation();
         }
     }
 }

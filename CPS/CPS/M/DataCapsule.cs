@@ -120,5 +120,31 @@ namespace CPS.M
 
             return new DataCapsule(weaveValues);
         }
+
+        internal DataCapsule Correlation(DataCapsule dataCapsule)
+        {
+            ChartValues<ObservablePoint> correlationValues = new ChartValues<ObservablePoint>();
+
+            double frequency = (this.XValues[this.XValues.Count - 1] + dataCapsule.XValues[dataCapsule.XValues.Count - 1]) / (this.XValues.Count + dataCapsule.XValues.Count - 1);
+            int counter = 0;
+            double[] time = SignalLogics.GetTimeValues(frequency, this.XValues[this.XValues.Count - 1] + dataCapsule.XValues[dataCapsule.XValues.Count - 1]);
+
+            for(int i = 0; i < this.XValues.Count + dataCapsule.XValues.Count - 1; i++)
+            {
+                double sum = 0;
+                int k1min = i >= dataCapsule.XValues.Count - 1 ? i - (dataCapsule.XValues.Count - 1) : 0,
+                    k1max = i < this.XValues.Count - 1 ? i : this.XValues.Count - 1,
+                    k2min = i <= dataCapsule.XValues.Count - 1 ? dataCapsule.XValues.Count - 1 - i : 0;
+
+                for(int k1 = k1min, k2 = k2min; k1 <= k1max; k1++, k2++)
+                {
+                    sum += this.YValues[k1] * dataCapsule.YValues[k2];
+                }
+                correlationValues.Add(new ObservablePoint { X = time[counter], Y = sum });
+                counter++;
+            }
+
+            return new DataCapsule(correlationValues);
+        }
     }
 }
