@@ -1,0 +1,48 @@
+﻿<Window x:Class="CPS.SensorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CPS"
+        mc:Ignorable="d"
+        Title="SensorWindow" Height="436.95" Width="400" ResizeMode="NoResize">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="240"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        
+        <Label Grid.Column="0" Grid.Row="0" Content="Jednostka czasowa symulatora:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,1,0,0"/>
+        <TextBox Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" Height="23" Margin="10,27,10,0" TextWrapping="Wrap" Text="{Binding SimulatorTimeUnit}" VerticalAlignment="Top" Width="220"/>
+
+        <Label Grid.Column="0" Grid.Row="1" Content="Prędkość śledzonego obiektu:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,1,0,0"/>
+        <TextBox Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" Height="23" Margin="10,27,10,0" TextWrapping="Wrap" Text="{Binding ObjectSpeed}" VerticalAlignment="Top" Width="220"/>
+
+        <Label Grid.Column="0" Grid.Row="2" Content="Prędkość rozchodzenia się sygnału:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,1,0,0"/>
+        <TextBox Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" Height="23" Margin="10,27,10,0" TextWrapping="Wrap" Text="{Binding SignalSpeed}" VerticalAlignment="Top" Width="220"/>
+
+        <Label Grid.Column="0" Grid.Row="3" Content="Okres ciągłego sygnału sondującego:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,1,0,0"/>
+        <TextBox Grid.Column="0" Grid.Row="3" HorizontalAlignment="Center" Height="23" Margin="10,27,10,0" TextWrapping="Wrap" Text="{Binding ProbeSignalPeriod}" VerticalAlignment="Top" Width="220"/>
+
+        <Label Grid.Column="0" Grid.Row="4" Content="Częstotliwość próbkowania sygnału:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,1,0,0"/>
+        <TextBox Grid.Column="0" Grid.Row="4" HorizontalAlignment="Center" Height="23" Margin="10,27,10,0" TextWrapping="Wrap" Text="{Binding ProbeSignalSamplingFrequency}" VerticalAlignment="Top" Width="220"/>
+
+        <Label Grid.Column="0" Grid.Row="5" Content="Długości buforów dyskretnych:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,1,0,0"/>
+        <TextBox Grid.Column="0" Grid.Row="5" HorizontalAlignment="Center" Height="23" Margin="10,27,10,0" TextWrapping="Wrap" Text="{Binding DiscreetBufforsLength}" VerticalAlignment="Top" Width="220"/>
+
+        <Label Grid.Column="0" Grid.Row="6" Content="Okres raportowania chwilowej wartości odległości" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,1,0,0"/>
+        <TextBox Grid.Column="0" Grid.Row="6" HorizontalAlignment="Center" Height="23" Margin="10,27,10,0" TextWrapping="Wrap" Text="{Binding RaportingPeriod}" VerticalAlignment="Top" Width="220"/>
+
+        <TextBlock Grid.Column="1" Grid.Row="0" Grid.RowSpan="6" Margin="10" Text="{Binding SensorResult}"/>
+        <Button Grid.Column="1" Grid.Row="6" Margin="10,27,10,10" Content="Generate" Command="{Binding GenerateButtonPressed, UpdateSourceTrigger=PropertyChanged}"/>
+    </Grid>
+</Window>

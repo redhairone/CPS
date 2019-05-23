@@ -32,8 +32,9 @@
                 <MenuItem Header="Akcja operacja">
                     <MenuItem Header="Splot" Command="{Binding WeaveButtonPressed}"/>
                     <MenuItem Header="Korelacja" Command="{Binding CorrelationButtonPressed}"/>
-                    <MenuItem Header="Mnożenie" Command="{Binding MultiplicationButtonPressed}"/>
-                    <MenuItem Header="Dzielenie" Command="{Binding DivisionButtonPressed}"/>
+                    <MenuItem Header="Korelacja z użyciem splotu" Command="{Binding WeaveCorrelationButtonPressed}"/>
+                    <MenuItem Header="Filtr" Command="{Binding FilterButtonPressed}"/>
+                    <MenuItem Header="Sensor" Command="{Binding SensorButtonPressed}"/>
                 </MenuItem>
             </Menu>
         </DockPanel>
@@ -97,6 +98,7 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
                 <Expander Header="Parametry" IsExpanded="true">
@@ -104,22 +106,27 @@
                         <ItemsControl ItemsSource="{Binding Path= SignalParametersCollection}"/>
                     </StackPanel>
                 </Expander>
-                <Expander Header="Parametry dodatkowe:" Grid.Row="1" IsExpanded="True" >
+                <Expander Header="Parametry dodatkowe:" Grid.Row="1" IsExpanded="False" >
                     <StackPanel>
                         <ItemsControl ItemsSource="{Binding Path=AdditionalParametersCollection}"/>
                     </StackPanel>
                 </Expander>
-                <Expander Header="Wyniki:" Grid.Row="2" >
+                <Expander Header="Parametry filtra:" Grid.Row="2" IsExpanded="True" >
+                    <StackPanel>
+                        <ItemsControl ItemsSource="{Binding Path=FilterParameters}"/>
+                    </StackPanel>
+                </Expander>
+                <Expander Header="Wyniki:" Grid.Row="3" >
                     <StackPanel>
                         <ItemsControl ItemsSource="{Binding Path=ResultsCollection}"/>
                     </StackPanel>
                 </Expander>
-                <Expander Header="Wyniki:" Grid.Row="2" >
+                <Expander Header="Wyniki:" Grid.Row="4" >
                     <StackPanel>
                         <ItemsControl ItemsSource="{Binding Path=ResultsCollection}"/>
                     </StackPanel>
                 </Expander>
-                <Expander Header="Wyniki sinc:" Grid.Row="3" >
+                <Expander Header="Wyniki sinc:" Grid.Row="5" >
                     <StackPanel>
                         <ItemsControl ItemsSource="{Binding Path=SincResultsCollection}"/>
                     </StackPanel>

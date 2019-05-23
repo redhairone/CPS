@@ -29,7 +29,7 @@ namespace CPS.Logics
 
         public static double[] GetTimeValues(double signalFrequency, double timeDuration, double startTime = 0)
         {
-            double[] result = new double[(int)(timeDuration / signalFrequency + 1.0)];
+            double[] result = new double[(int)(timeDuration / signalFrequency)];
             double step = signalFrequency;
 
             result[0] = startTime;
@@ -157,6 +157,26 @@ namespace CPS.Logics
             for(int i=0; i < howManySections+1; i++)
             {
                 result[i] = "(" + Math.Round(minMax[0] + (i) * step, 3) + "; " + Math.Round(minMax[0] + (i+1) * step, 3) + ")";
+            }
+
+            return result;
+        }
+
+        internal static IChartValues GetChartValues(List<double> amplitude, List<double> period, double start, double duration, double samplingFrequency)
+        {
+            ChartValues<ObservablePoint> result = new ChartValues<ObservablePoint>();
+
+            for(int i = 0; i < (duration * samplingFrequency); i++)
+            {
+                result.Add(new ObservablePoint { X = start + i * (1.0 / samplingFrequency), Y = 0 });
+            }
+
+            for(int n = 0; n < amplitude.Count; n++)
+            {
+                foreach(var item in  result)
+                {
+                    item.Y += amplitude[n] * Math.Sin(Math.PI * 2.0 / period[n] * item.X);
+                }
             }
 
             return result;

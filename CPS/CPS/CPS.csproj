@@ -64,14 +64,20 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Logics\FilterLogics.cs" />
     <Compile Include="Logics\MathLogics.cs" />
-    <Compile Include="Logics\OperationLogics.cs" />
     <Compile Include="Logics\SerializationLogics.cs" />
     <Compile Include="Logics\SignalLogics.cs" />
     <Compile Include="Logics\ResultLogics.cs" />
     <Compile Include="M\DataCapsule.cs" />
     <Compile Include="M\Model.cs" />
+    <Compile Include="M\SensorModel.cs" />
+    <Compile Include="SensorWindow.xaml.cs">
+      <DependentUpon>SensorWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="VM\CustomComboBox.cs" />
     <Compile Include="VM\RelayCommand.cs" />
+    <Compile Include="VM\SensorViewModel.cs" />
     <Compile Include="VM\ViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -86,6 +92,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="SensorWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

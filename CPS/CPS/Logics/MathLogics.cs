@@ -78,5 +78,14 @@ namespace CPS.Logics
 
             return result;
         }
+
+        internal static double CalculateDistance(List<double> correlation, double probeSignalSamplingFrequency, double signalSpeed)
+        {
+            List<double> rightHalf = correlation.Skip(correlation.Count / 2).ToList();
+            int maxSample = rightHalf.IndexOf(rightHalf.Max());
+            double tDelay = maxSample / probeSignalSamplingFrequency;
+
+            return (tDelay * signalSpeed) / 2;
+        }
     }
 }

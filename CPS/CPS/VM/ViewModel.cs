@@ -13,6 +13,7 @@ namespace CPS.VM
     class ViewModel
     {
         private Model model = new Model();
+        private SensorWindow sensorWindow = new SensorWindow();
         private int selectedSignal;
 
         #region THE_LABELS_AND_THE_TEXTBOXES
@@ -69,6 +70,22 @@ namespace CPS.VM
         private readonly Label SeenSamplesLabel = new Label { Content = "Liczba rozważanych próbek:" };
         private readonly CustomTextBox<int> SeenSamplesTextBox = new CustomTextBox<int>(0);
 
+        //<--LABELS AND TEXTBOXES OF THE FILTER PARAMETERS TAB-->
+        private readonly Label MAmountLabel = new Label { Content = "M:" };
+        private readonly CustomTextBox<int> MAmountTextBox = new CustomTextBox<int>(25);
+
+        private readonly Label FilterSamplingFrequencyLabel = new Label { Content = "Częst. próbkowania filtru:" };
+        private readonly CustomTextBox<int> FilterSamplingFrequencyTextBox = new CustomTextBox<int>(100);
+
+        private readonly Label CutOffSamplingFrequencyLabel = new Label { Content = "Graniczna częst. próbkowania filtru:" };
+        private readonly CustomTextBox<int> CutOffSamplingFrequencyTextBox = new CustomTextBox<int>(100);
+
+        private readonly Label WindowLabel = new Label { Content = "Okno:" };
+        private readonly CustomComboBox WindowComboBox = new CustomComboBox(new string[] { "Okno prostokątne", "Okno Hamminga", "Okno Hanninga", "Okno Blackmana"});
+
+        private readonly Label FilterLabel = new Label { Content = "Filtr:" };
+        private readonly CustomComboBox FilterComboBox = new CustomComboBox(new string[] { "Dolnoprzepustowy", "Środkowoprzepustowy", "Górnoprzepustowy" });
+
         //<--LABELS AND TEXTBOXES OF THE RESULTS TAB-->
         private readonly Label AverageLabel = new Label { Content = "Wartość średnia:" };
         private readonly CustomTextBox<double> AverageTextBox = new CustomTextBox<double>(true);
@@ -108,6 +125,9 @@ namespace CPS.VM
         public ICommand DivisionButtonPressed { get; }
         public ICommand WeaveButtonPressed { get; }
         public ICommand CorrelationButtonPressed { get; }
+        public ICommand WeaveCorrelationButtonPressed { get; }
+        public ICommand FilterButtonPressed { get; }
+        public ICommand SensorButtonPressed { get; }
 
         public SeriesCollection NormalChartSeries { get; set; }
         public SeriesCollection SamplingChartSeries { get; set; }
@@ -118,6 +138,7 @@ namespace CPS.VM
         public SeriesCollection SincReconstructionChartSeries { get; set; }
         public ObservableCollection<Control> SignalParametersCollection { get; set; }
         public ObservableCollection<Control> AdditionalParametersCollection { get; set; }
+        public ObservableCollection<Control> FilterParameters { get; set; }
         public ObservableCollection<Control> ResultsCollection { get; set; }
         public ObservableCollection<Control> SincResultsCollection { get; set; }
         public int SelectedSignal
@@ -134,6 +155,7 @@ namespace CPS.VM
         {
             SignalParametersCollection = new ObservableCollection<Control>();
             AdditionalParametersCollection = new ObservableCollection<Control>();
+            FilterParameters = new ObservableCollection<Control>();
             ResultsCollection = new ObservableCollection<Control>();
             SincResultsCollection = new ObservableCollection<Control>();
 
@@ -206,6 +228,9 @@ namespace CPS.VM
             DivisionButtonPressed = new RelayCommand(Divide);
             WeaveButtonPressed = new RelayCommand(Weave);
             CorrelationButtonPressed = new RelayCommand(Correlation);
+            WeaveCorrelationButtonPressed = new RelayCommand(WeaveCorrelation);
+            FilterButtonPressed = new RelayCommand(Filter);
+            SensorButtonPressed = new RelayCommand(Sensor);
 
             Config();
         }
@@ -227,6 +252,24 @@ namespace CPS.VM
             AdditionalParametersCollection.Add(SeenSamplesLabel);
             AdditionalParametersCollection.Add(SeenSamplesTextBox);
             #endregion
+
+            #region ADDING PARAMETERS FOR THE RESULTS
+            FilterParameters.Add(MAmountLabel);
+            FilterParameters.Add(MAmountTextBox);
+
+            FilterParameters.Add(FilterSamplingFrequencyLabel);
+            FilterParameters.Add(FilterSamplingFrequencyTextBox);
+
+            FilterParameters.Add(CutOffSamplingFrequencyLabel);
+            FilterParameters.Add(CutOffSamplingFrequencyTextBox);
+
+            FilterParameters.Add(WindowLabel);
+            FilterParameters.Add(WindowComboBox);
+
+            FilterParameters.Add(FilterLabel);
+            FilterParameters.Add(FilterComboBox);
+            #endregion
+
 
             #region ADDING RESULTS CONTROLS TO THE TAB
             ResultsCollection.Add(AverageLabel);
@@ -497,6 +540,21 @@ namespace CPS.VM
         public void Correlation()
         {
             NormalChartSeries[0].Values = model.Correlation();
+        }
+
+        public void WeaveCorrelation()
+        {
+            NormalChartSeries[0].Values = model.WeaveCorrelation();
+        }
+
+        public void Filter()
+        {
+            NormalChartSeries[0].Values = model.Filter(MAmountTextBox.GetValue(), FilterSamplingFrequencyTextBox.GetValue(), CutOffSamplingFrequencyTextBox.GetValue(), WindowComboBox.SelectedIndex, FilterComboBox.SelectedIndex);
+        }
+
+        public void Sensor()
+        {
+            sensorWindow.Show();
         }
     }
 }

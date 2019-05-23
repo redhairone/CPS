@@ -286,5 +286,52 @@ namespace CPS.M
             return loaded[0].Correlation(loaded[1]).GetValues();
         }
 
+        internal IChartValues WeaveCorrelation()
+        {
+            DataCapsule[] loaded = SerializationLogics.LoadFiles();
+
+            return loaded[0].WeaveCorrelation(loaded[1]).GetValues();
+        }
+
+        internal IChartValues Filter(int m, int samplingFrequency, int cutOffFrequency, int windowChoice, int filterChoice)
+        {
+            DataCapsule loaded = SerializationLogics.Deserialize();
+            List<double> factors, filtered;
+
+            switch(filterChoice)
+            {
+                case 0:
+                    factors = FilterLogics.LowFilter(m, cutOffFrequency, samplingFrequency);
+                    break;
+                case 1:
+                    factors = FilterLogics.MediumFilter(FilterLogics.LowFilter(m, cutOffFrequency, samplingFrequency, (samplingFrequency / (cutOffFrequency / 4 - samplingFrequency))));
+                    break;
+                case 2:
+                    factors = FilterLogics.MediumFilter(FilterLogics.LowFilter(m, cutOffFrequency, samplingFrequency, (samplingFrequency / (cutOffFrequency / 2 - samplingFrequency))));
+                    break;
+                default:
+                    throw new Exception("The filter combobox is out of its boundries.");
+            }
+
+            switch(windowChoice)
+            {
+                case 0:
+                    filtered = FilterLogics.RectangularWindow(factors);
+                    break;
+                case 1:
+                    filtered = FilterLogics.HammingWindow(factors);
+                    break;
+                case 2:
+                    filtered = FilterLogics.HanningWindow(factors);
+                    break;
+                case 3:
+                    filtered = FilterLogics.BlackmanWindow(factors);
+                    break;
+                default:
+                    throw new Exception("The window combobox is out of its boundries.");
+            }
+
+            return loaded.Weave(filtered).GetValues();
+        }
     }
 }
