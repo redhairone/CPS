@@ -239,16 +239,16 @@ namespace CPS.M
             SerializationLogics.Serialize(capsule);
         }
 
-        internal IChartValues Deserialize()
+        internal DataCapsule Deserialize()
         {
-            return SerializationLogics.Deserialize().GetValues();
+            return SerializationLogics.Deserialize();
         }
 
         internal IChartValues Add()
         {
             DataCapsule[] loaded = SerializationLogics.LoadFiles();
 
-            return loaded[0].Divide(loaded[1]).GetValues();
+            return loaded[0].Add(loaded[1]).GetValues();
         }
 
         internal IChartValues Subtract()
@@ -293,7 +293,7 @@ namespace CPS.M
             return loaded[0].WeaveCorrelation(loaded[1]).GetValues();
         }
 
-        internal IChartValues Filter(int m, int samplingFrequency, int cutOffFrequency, int windowChoice, int filterChoice)
+        internal IChartValues Filter(int m, int cutOffFrequency, int windowChoice, int filterChoice)
         {
             DataCapsule loaded = SerializationLogics.Deserialize();
             List<double> factors, filtered;
@@ -301,13 +301,13 @@ namespace CPS.M
             switch(filterChoice)
             {
                 case 0:
-                    factors = FilterLogics.LowFilter(m, cutOffFrequency, samplingFrequency);
+                    factors = FilterLogics.LowFilter(m, loaded.SamplingFrequency / cutOffFrequency);
                     break;
                 case 1:
-                    factors = FilterLogics.MediumFilter(FilterLogics.LowFilter(m, cutOffFrequency, samplingFrequency, (samplingFrequency / (cutOffFrequency / 4 - samplingFrequency))));
+                    factors = FilterLogics.MediumFilter(FilterLogics.LowFilter(m, (loaded.SamplingFrequency / (loaded.SamplingFrequency / 4.0 - cutOffFrequency))));
                     break;
                 case 2:
-                    factors = FilterLogics.MediumFilter(FilterLogics.LowFilter(m, cutOffFrequency, samplingFrequency, (samplingFrequency / (cutOffFrequency / 2 - samplingFrequency))));
+                    factors = FilterLogics.HighFilter(FilterLogics.LowFilter(m, (loaded.SamplingFrequency / (loaded.SamplingFrequency / 2.0 - cutOffFrequency))));
                     break;
                 default:
                     throw new Exception("The filter combobox is out of its boundries.");
@@ -316,7 +316,7 @@ namespace CPS.M
             switch(windowChoice)
             {
                 case 0:
-                    filtered = FilterLogics.RectangularWindow(factors);
+                    filtered = factors;
                     break;
                 case 1:
                     filtered = FilterLogics.HammingWindow(factors);

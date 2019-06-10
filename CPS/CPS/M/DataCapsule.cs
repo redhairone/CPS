@@ -12,11 +12,14 @@ namespace CPS.M
     {
         public List<double> XValues { get; set; }
         public List<double> YValues { get; set; }
+        public int SamplingFrequency { get; set; }
 
-        public DataCapsule(ChartValues<ObservablePoint> values)
+        public DataCapsule(ChartValues<ObservablePoint> values, int frequency = 0)
         {
             XValues = new List<double>();
             YValues = new List<double>();
+
+            SamplingFrequency = frequency;
 
             foreach(var item in values)
             {
@@ -25,11 +28,62 @@ namespace CPS.M
             }
         }
 
-        public DataCapsule(List<double> xValues, List<double> yValues)
+        public DataCapsule(DataCapsule dataCapsule)
+        {
+            XValues = new List<double>(dataCapsule.XValues);
+            YValues = new List<double>(dataCapsule.YValues);
+
+            SamplingFrequency = dataCapsule.SamplingFrequency;
+        }
+
+        public DataCapsule(DataCapsule dataCapsule, int samplesToMove)
+        {
+            List<double> pointsLeft = dataCapsule.YValues.Take(dataCapsule.YValues.Count - samplesToMove).ToList();
+            List<double> receivedSignal = dataCapsule.YValues.Skip(dataCapsule.YValues.Count - samplesToMove).ToList();
+            receivedSignal.AddRange(pointsLeft);
+
+            XValues = new List<double>(dataCapsule.XValues);
+            YValues = receivedSignal;
+
+            SamplingFrequency = dataCapsule.SamplingFrequency;
+        }
+
+        public DataCapsule(List<double> xValues, List<double> yValues, int frequency = 0)
         {
             XValues = xValues;
             YValues = yValues;
+
+            SamplingFrequency = frequency;
         }
+
+        public DataCapsule(List<double> yValues, int frequency)
+        {
+            YValues = yValues;
+            XValues = new List<double>();
+
+            for (int i = 0; i < yValues.Count; i++)
+            {
+                XValues.Add(i * (1.0 / frequency));
+            }
+
+            SamplingFrequency = frequency;
+        }
+
+        public DataCapsule(double end, List<double> yValues, int frequency = 0)
+        {
+            YValues = yValues;
+            XValues = new List<double>();
+
+            double freq = end / yValues.Count;
+
+            for(int i = 0; i < yValues.Count; i++)
+            {
+                XValues.Add(i * (1.0/frequency));
+            }
+
+            SamplingFrequency = frequency;
+        }
+
 
         public IChartValues GetValues()
         {
@@ -104,33 +158,52 @@ namespace CPS.M
 
         internal DataCapsule Weave(DataCapsule dataCapsule)
         {
-            ChartValues<ObservablePoint> weaveValues = new ChartValues<ObservablePoint>();
+            List<double> a = this.YValues, b = dataCapsule.YValues;
 
-            double frequency = (this.XValues.Max() + dataCapsule.XValues.Max()) / (this.XValues.Count + dataCapsule.XValues.Count - 1);
-            int counter = 0;
-            double[] time = SignalLogics.GetTimeValues(frequency, this.XValues.Max() + dataCapsule.XValues.Max());
-
-            for(int i = 0; i < this.XValues.Count + dataCapsule.XValues.Count; i++)
+            var result = new List<double>();
+            for(int i = 0; i < a.Count + b.Count - 1; i++)
             {
-                if (i >= time.Length)
-                {
-                    break;
-                }
-
                 double sum = 0;
-                var kmin = i >= this.XValues.Count - 1 ? i - (this.XValues.Count - 1) : 0;
-                var kmax = i < dataCapsule.XValues.Count - 1 ? i : dataCapsule.XValues.Count - 1;
-
-                for(int j = kmin; j < kmax; j++)
+                for(int j = 0; j<a.Count; j++)
                 {
-                    sum += dataCapsule.YValues[j] * this.YValues[i - j];
+                    if (i - j < 0 || i - j >= b.Count)
+                    {
+                        continue;
+                    }
+                    else sum += a[j] * b[i - j];
                 }
-
-                weaveValues.Add(new ObservablePoint { X = time[counter], Y = sum });
-                counter++;
+                result.Add(sum);
             }
 
-            return new DataCapsule(weaveValues);
+            return new DataCapsule(result, this.SamplingFrequency);
+
+            //ChartValues<ObservablePoint> weaveValues = new ChartValues<ObservablePoint>();
+
+            //double frequency = (this.XValues.Max() + dataCapsule.XValues.Max()) / (this.XValues.Count + dataCapsule.XValues.Count - 1);
+            //int counter = 0;
+            //double[] time = SignalLogics.GetTimeValues(frequency, this.XValues.Max() + dataCapsule.XValues.Max());
+
+            //for(int i = 0; i < this.XValues.Count + dataCapsule.XValues.Count; i++)
+            //{
+            //    if (i >= time.Length)
+            //    {
+            //        break;
+            //    }
+
+            //    double sum = 0;
+            //    var kmin = i >= this.XValues.Count - 1 ? i - (this.XValues.Count - 1) : 0;
+            //    var kmax = i < dataCapsule.XValues.Count - 1 ? i : dataCapsule.XValues.Count - 1;
+
+            //    for(int j = kmin; j < kmax; j++)
+            //    {
+            //        sum += dataCapsule.YValues[j] * this.YValues[i - j];
+            //    }
+
+            //    weaveValues.Add(new ObservablePoint { X = time[counter], Y = sum });
+            //    counter++;
+            //}
+
+            //return new DataCapsule(weaveValues, dataCapsule.SamplingFrequency);
         }
 
         internal DataCapsule Weave(List<double> factors)
@@ -140,17 +213,20 @@ namespace CPS.M
             for(int i = 0; i < this.XValues.Count + factors.Count - 1; i++)
             {
                 double sum = 0;
-                for(int j = 0; j < this.XValues.Count; j++)
+                for(int j = 0; j < this.YValues.Count; j++)
                 {
-                    if (i - j >= 0 && i - j < factors.Count)
+                    if (i - j < 0 || i - j >= factors.Count) continue;
+                    else 
                     {
-                        sum += this.YValues[j] * factors[factors.Count - (i - j) - 1];
+                        sum += this.YValues[j] * factors[i-j];
                     }
                 }
                 result.Add(sum);
             }
 
-            return new DataCapsule(this.XValues, result.GetRange(0, this.XValues.Count));
+            List<double> xs = SignalLogics.GetTimeValues(this.XValues[this.XValues.Count - 1]/result.Count, this.XValues[this.XValues.Count - 1]).ToList();
+
+            return new DataCapsule(xs, result);
         }
 
         internal DataCapsule Correlation(DataCapsule dataCapsule)
@@ -176,7 +252,7 @@ namespace CPS.M
                 counter++;
             }
 
-            return new DataCapsule(correlationValues);
+            return new DataCapsule(correlationValues, dataCapsule.SamplingFrequency);
         }
 
         internal DataCapsule WeaveCorrelation(DataCapsule dataCapsule)

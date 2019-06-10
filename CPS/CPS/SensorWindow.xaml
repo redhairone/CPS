@@ -4,8 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CPS"
+        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         mc:Ignorable="d"
-        Title="SensorWindow" Height="436.95" Width="400" ResizeMode="NoResize">
+        Title="SensorWindow" Height="500" Width="800">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -20,29 +21,22 @@
             <ColumnDefinition Width="240"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
+
+        <ItemsControl Grid.Column="0" Grid.RowSpan="4" ItemsSource="{Binding Path=ParametersCollection}"/>
+        <ItemsControl Grid.Column="0" Grid.Row="5" ItemsSource="{Binding Path=ResultsCollection}"/>
+
+        <TabControl Grid.Column="1" Grid.RowSpan="7" Margin="5">
+            <TabItem Header="Sygnał przed wysłaniem">
+                <lvc:CartesianChart Series="{Binding BeforeChartSeries}" LegendLocation="Bottom" DisableAnimations="True" Hoverable="False" DataTooltip="{x:Null}"/>
+            </TabItem>
+            <TabItem Header="Sygnał po powrocie">
+                <lvc:CartesianChart Series="{Binding AfterChartSeries}" LegendLocation="Bottom" DisableAnimations="True" Hoverable="False" DataTooltip="{x:Null}"/>
+            </TabItem>
+            <TabItem Header="Korelacja sygnałów">
+                <lvc:CartesianChart Series="{Binding CorrelationChartSeries}" LegendLocation="Bottom" DisableAnimations="True" Hoverable="False" DataTooltip="{x:Null}"/>
+            </TabItem>
+        </TabControl>
         
-        <Label Grid.Column="0" Grid.Row="0" Content="Jednostka czasowa symulatora:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,1,0,0"/>
-        <TextBox Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" Height="23" Margin="10,27,10,0" TextWrapping="Wrap" Text="{Binding SimulatorTimeUnit}" VerticalAlignment="Top" Width="220"/>
-
-        <Label Grid.Column="0" Grid.Row="1" Content="Prędkość śledzonego obiektu:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,1,0,0"/>
-        <TextBox Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" Height="23" Margin="10,27,10,0" TextWrapping="Wrap" Text="{Binding ObjectSpeed}" VerticalAlignment="Top" Width="220"/>
-
-        <Label Grid.Column="0" Grid.Row="2" Content="Prędkość rozchodzenia się sygnału:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,1,0,0"/>
-        <TextBox Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" Height="23" Margin="10,27,10,0" TextWrapping="Wrap" Text="{Binding SignalSpeed}" VerticalAlignment="Top" Width="220"/>
-
-        <Label Grid.Column="0" Grid.Row="3" Content="Okres ciągłego sygnału sondującego:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,1,0,0"/>
-        <TextBox Grid.Column="0" Grid.Row="3" HorizontalAlignment="Center" Height="23" Margin="10,27,10,0" TextWrapping="Wrap" Text="{Binding ProbeSignalPeriod}" VerticalAlignment="Top" Width="220"/>
-
-        <Label Grid.Column="0" Grid.Row="4" Content="Częstotliwość próbkowania sygnału:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,1,0,0"/>
-        <TextBox Grid.Column="0" Grid.Row="4" HorizontalAlignment="Center" Height="23" Margin="10,27,10,0" TextWrapping="Wrap" Text="{Binding ProbeSignalSamplingFrequency}" VerticalAlignment="Top" Width="220"/>
-
-        <Label Grid.Column="0" Grid.Row="5" Content="Długości buforów dyskretnych:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,1,0,0"/>
-        <TextBox Grid.Column="0" Grid.Row="5" HorizontalAlignment="Center" Height="23" Margin="10,27,10,0" TextWrapping="Wrap" Text="{Binding DiscreetBufforsLength}" VerticalAlignment="Top" Width="220"/>
-
-        <Label Grid.Column="0" Grid.Row="6" Content="Okres raportowania chwilowej wartości odległości" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,1,0,0"/>
-        <TextBox Grid.Column="0" Grid.Row="6" HorizontalAlignment="Center" Height="23" Margin="10,27,10,0" TextWrapping="Wrap" Text="{Binding RaportingPeriod}" VerticalAlignment="Top" Width="220"/>
-
-        <TextBlock Grid.Column="1" Grid.Row="0" Grid.RowSpan="6" Margin="10" Text="{Binding SensorResult}"/>
-        <Button Grid.Column="1" Grid.Row="6" Margin="10,27,10,10" Content="Generate" Command="{Binding GenerateButtonPressed, UpdateSourceTrigger=PropertyChanged}"/>
+        <Button Grid.Column="0" Grid.Row="6" Margin="10,10,10,10" Content="Generate" Command="{Binding GenerateButtonPressed, UpdateSourceTrigger=PropertyChanged}"/>
     </Grid>
 </Window>

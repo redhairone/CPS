@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace CPS.VM
@@ -24,11 +21,15 @@ namespace CPS.VM
 
         public T GetValue()
         {
-            T example = (T)Convert.ChangeType(this.Text, typeof(T));
-
-            Console.WriteLine(example.ToString());
-
-            return (T)Convert.ChangeType(this.Text, typeof(T));
+            try
+            {
+                T result = (T)Convert.ChangeType(this.Text.Replace('.', ','), typeof(T));
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.ToString());
+            }
+            return (T)Convert.ChangeType(this.Text.Replace('.', ','), typeof(T));
         }
     }
 }

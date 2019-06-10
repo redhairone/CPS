@@ -134,6 +134,7 @@
             </Grid>
         </ScrollViewer>
 
-        <Button Grid.Column="0" Grid.Row="1" Content="Generate" Margin="5,0,5,7.5" VerticalAlignment="Bottom" Width="Auto" Height="25" Command="{Binding GenerateButtonPressed}"/>
+        <Button Grid.Column="0" Grid.Row="1" Content="Generate" Margin="10,0,125,10" VerticalAlignment="Bottom" Height="25" Command="{Binding GenerateButtonPressed}"/>
+        <Button Grid.Column="0" Grid.Row="1" Content="Filter" Margin="125,0,10,9" VerticalAlignment="Bottom" Height="26" Command="{Binding FilterButtonPressed}"/>
     </Grid>
 </Window>

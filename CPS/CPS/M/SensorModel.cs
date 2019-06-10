@@ -6,58 +6,45 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace CPS.M
 {
     class SensorModel
     {
-        private Random rand = new Random();
-
-        internal string Simulate(double simulatorTimeUnit, double objectSpeed, double signalSpeed, double probeSignalPeriod, double probeSignalSamplingFrequency, double discreetBufforsLength, double raportingPeriod)
+        internal DataCapsule Deserialize()
         {
-            List<double> leftResult = new List<double>();
-            List<double> rightResult = new List<double>();
+            return SerializationLogics.Deserialize();
+        }
 
-            List<double> amplitudes = new List<double>();
-            List<double> periods = new List<double>();
+        internal DataCapsule GenerateSignalComeBack(DataCapsule signalBefore, double signalSpeed, double objectPosition, double objectSpeed, double momentInTime, double timeFrequency = 0.01)
+        {
+            double objRoad = objectPosition + objectSpeed * momentInTime, signalRoad = signalSpeed * momentInTime;
 
-            periods.Add(rand.NextDouble() * (probeSignalPeriod - 1e-10) + 1e-10);
-            amplitudes.Add(rand.NextDouble() * 50.0 + 1.0);
-
-            periods.Add(rand.NextDouble() * (probeSignalPeriod - 1e-10) + 1e-10);
-            amplitudes.Add(rand.NextDouble() * 50.0 + 1.0);
-
-            periods[0] = probeSignalPeriod;
-            double duration = discreetBufforsLength / probeSignalSamplingFrequency;
-
-            for(double i = 0; i<10.0 * raportingPeriod; i += raportingPeriod)
+            if(signalRoad < objRoad * 2)
             {
-                double realDistance = 0.0 + i * objectSpeed,
-                    propagationTime = 2 * (realDistance / signalSpeed);
-
-                DataCapsule probingSignal = new DataCapsule((ChartValues<ObservablePoint>)SignalLogics.GetChartValues(amplitudes, periods, i - duration, duration, probeSignalSamplingFrequency));
-                DataCapsule feedbackSignal = new DataCapsule((ChartValues<ObservablePoint>)SignalLogics.GetChartValues(amplitudes, periods, i - propagationTime - duration, duration, probeSignalSamplingFrequency));
-                DataCapsule correlation = probingSignal.WeaveCorrelation(feedbackSignal);
-
-                List<double> correlationY = new List<double>();
-                foreach(var item in correlation.YValues)
-                {
-                    correlationY.Add(item);
-                }
-
-                correlationY.RemoveAt(correlationY.Count - 1);
-                leftResult.Add(realDistance);
-                rightResult.Add(MathLogics.CalculateDistance(correlationY,probeSignalSamplingFrequency,signalSpeed));
+                MessageBox.Show("W zadanym czasie sygnał nie zdąrzy powrócić.");
+                return null;
+            }
+            else if (signalRoad > objRoad * 2)
+            {
+                signalRoad = objRoad * 2;
             }
 
-            StringBuilder sb = new StringBuilder("Odległości:" + Environment.NewLine);
+            int samplesToMove = (int)(signalRoad / signalSpeed * signalBefore.SamplingFrequency);
+            while (samplesToMove >= signalBefore.XValues.Count) samplesToMove -= signalBefore.XValues.Count;
 
-            for(int i = 0; i < leftResult.Count; i++)
-            {
-                sb.Append(leftResult[i] + " -> " + rightResult[i] + Environment.NewLine);
-            }
+            if (samplesToMove == 0) return new DataCapsule(signalBefore);
+            else return new DataCapsule(signalBefore, samplesToMove);
+        }
 
-            return sb.ToString();
+        internal string CalculateDistance(List<double> yValues, double signalSpeed, int freq)
+        {
+            List<double> right = yValues.Skip((yValues.Count - 1) / 2).ToList();
+            double a = right.Max();
+            int max = right.FindIndex(c => c == right.Max());
+            double b = (signalSpeed * ((double)max / freq) / 2);
+            return b.ToString();
         }
     }
 }

@@ -13,7 +13,6 @@ namespace CPS.VM
     class ViewModel
     {
         private Model model = new Model();
-        private SensorWindow sensorWindow = new SensorWindow();
         private int selectedSignal;
 
         #region THE_LABELS_AND_THE_TEXTBOXES
@@ -77,7 +76,7 @@ namespace CPS.VM
         private readonly Label FilterSamplingFrequencyLabel = new Label { Content = "Częst. próbkowania filtru:" };
         private readonly CustomTextBox<int> FilterSamplingFrequencyTextBox = new CustomTextBox<int>(100);
 
-        private readonly Label CutOffSamplingFrequencyLabel = new Label { Content = "Graniczna częst. próbkowania filtru:" };
+        private readonly Label CutOffSamplingFrequencyLabel = new Label { Content = "Czestotliwość odcięcia:" };
         private readonly CustomTextBox<int> CutOffSamplingFrequencyTextBox = new CustomTextBox<int>(100);
 
         private readonly Label WindowLabel = new Label { Content = "Okno:" };
@@ -257,8 +256,8 @@ namespace CPS.VM
             FilterParameters.Add(MAmountLabel);
             FilterParameters.Add(MAmountTextBox);
 
-            FilterParameters.Add(FilterSamplingFrequencyLabel);
-            FilterParameters.Add(FilterSamplingFrequencyTextBox);
+            //FilterParameters.Add(FilterSamplingFrequencyLabel);
+            //FilterParameters.Add(FilterSamplingFrequencyTextBox);
 
             FilterParameters.Add(CutOffSamplingFrequencyLabel);
             FilterParameters.Add(CutOffSamplingFrequencyTextBox);
@@ -503,13 +502,15 @@ namespace CPS.VM
 
         public void Save()
         {
-            DataCapsule capsule = new DataCapsule((ChartValues<ObservablePoint>)NormalChartSeries[0].Values);
+            DataCapsule capsule = new DataCapsule((ChartValues<ObservablePoint>)NormalChartSeries[0].Values, SignalFrequencyTextBox.GetValue());
             model.Serialize(capsule);
         }
 
         public void Load()
         {
-            NormalChartSeries[0].Values = model.Deserialize();
+            DataCapsule loaded = model.Deserialize();
+            NormalChartSeries[0].Values = loaded.GetValues();
+            SignalFrequencyTextBox.Text = loaded.SamplingFrequency.ToString();
         }
 
         public void Add()
@@ -549,11 +550,12 @@ namespace CPS.VM
 
         public void Filter()
         {
-            NormalChartSeries[0].Values = model.Filter(MAmountTextBox.GetValue(), FilterSamplingFrequencyTextBox.GetValue(), CutOffSamplingFrequencyTextBox.GetValue(), WindowComboBox.SelectedIndex, FilterComboBox.SelectedIndex);
+            NormalChartSeries[0].Values = model.Filter(MAmountTextBox.GetValue(), CutOffSamplingFrequencyTextBox.GetValue(), WindowComboBox.SelectedIndex, FilterComboBox.SelectedIndex);
         }
 
         public void Sensor()
         {
+            SensorWindow sensorWindow = new SensorWindow();
             sensorWindow.Show();
         }
     }

@@ -34,7 +34,7 @@ namespace CPS.Logics
             OpenFileDialog ofd = new OpenFileDialog { Title = "Wczytaj wykres", Filter = "Binary files (*.bin)|*.bin" };
             ofd.ShowDialog();
 
-            if (ofd.FileName != "")
+            if (ofd.FileName != "" && ofd.FileName != null)
             {
                 IFormatter formatter = new BinaryFormatter();
                 using (var stream = new FileStream(ofd.FileName, FileMode.Open, FileAccess.Read, FileShare.Read))

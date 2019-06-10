@@ -10,15 +10,23 @@ namespace CPS.Logics
 {
     class FilterLogics
     {
-        internal static List<double> LowFilter(int m, int cutOffFrequency, int samplingFrequency, double k=-1)
+        internal static List<double> LowFilter(int m, double k)
         {
             List<double> result = new List<double>();
-            if (k == -1) k = samplingFrequency / cutOffFrequency;
+            int center = (m - 1) / 2;
 
-            for(int i = 1; i <= m; i++)
+            for (int i = 0; i < m; i++)
             {
-                if (i == (m - 1) / 2) result.Add(2.0 / k);
-                else result.Add(Math.Sin(2*Math.PI * (i-(m-1)/2) / k) / Math.PI * (i - (m-1) / 2));
+                double factor;
+                if(i == center)
+                {
+                    factor = 2.0 / k;
+                }
+                else
+                {
+                    factor = Math.Sin(2 * Math.PI * (i - center) / k) / (Math.PI * (i - center));
+                }
+                result.Add(factor);
             }
 
             return result;
@@ -28,9 +36,9 @@ namespace CPS.Logics
         {
             List<double> result = new List<double>();
 
-            for(int i = 0; i < factors.Count; i++)
+            for (int i = 0; i < factors.Count; i++)
             {
-                result.Add(factors[i] * 2 * Math.Sin((Math.PI*i) / 2.0));
+                result.Add(factors[i] * 2 * Math.Sin((Math.PI * i) / 2.0));
             }
 
             return result;
@@ -54,7 +62,7 @@ namespace CPS.Logics
         {
             List<double> results = new List<double>();
 
-            for(int i = 0; i < factors.Count; i++)
+            for (int i = 0; i < factors.Count; i++)
             {
                 double factor = (0.53836 - (0.46164 * Math.Cos((2 * Math.PI * i) / (factors.Count * 1.0))));
                 results.Add(factor * factors[i]);
