@@ -127,6 +127,7 @@ namespace CPS.VM
         public ICommand WeaveCorrelationButtonPressed { get; }
         public ICommand FilterButtonPressed { get; }
         public ICommand SensorButtonPressed { get; }
+        public ICommand TranformationsButtonPressed { get; }
 
         public SeriesCollection NormalChartSeries { get; set; }
         public SeriesCollection SamplingChartSeries { get; set; }
@@ -230,6 +231,7 @@ namespace CPS.VM
             WeaveCorrelationButtonPressed = new RelayCommand(WeaveCorrelation);
             FilterButtonPressed = new RelayCommand(Filter);
             SensorButtonPressed = new RelayCommand(Sensor);
+            TranformationsButtonPressed = new RelayCommand(Transformations);
 
             Config();
         }
@@ -557,6 +559,12 @@ namespace CPS.VM
         {
             SensorWindow sensorWindow = new SensorWindow();
             sensorWindow.Show();
+        }
+
+        public void Transformations()
+        {
+            Zad4Window zad4Window = new Zad4Window();
+            zad4Window.Show();
         }
     }
 }

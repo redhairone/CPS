@@ -36,6 +36,9 @@
                     <MenuItem Header="Filtr" Command="{Binding FilterButtonPressed}"/>
                     <MenuItem Header="Sensor" Command="{Binding SensorButtonPressed}"/>
                 </MenuItem>
+                <MenuItem Header="Transformations">
+                    <MenuItem Header="Transformations" Command="{Binding TranformationsButtonPressed}"/>
+                </MenuItem>
             </Menu>
         </DockPanel>
 

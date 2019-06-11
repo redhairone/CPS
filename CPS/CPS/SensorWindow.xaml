@@ -27,7 +27,12 @@
 
         <TabControl Grid.Column="1" Grid.RowSpan="7" Margin="5">
             <TabItem Header="Sygnał przed wysłaniem">
-                <lvc:CartesianChart Series="{Binding BeforeChartSeries}" LegendLocation="Bottom" DisableAnimations="True" Hoverable="False" DataTooltip="{x:Null}"/>
+                <lvc:CartesianChart 
+                    Series="{Binding BeforeChartSeries}" 
+                    LegendLocation="Bottom" 
+                    DisableAnimations="True" 
+                    Hoverable="False" 
+                    DataTooltip="{x:Null}"/>
             </TabItem>
             <TabItem Header="Sygnał po powrocie">
                 <lvc:CartesianChart Series="{Binding AfterChartSeries}" LegendLocation="Bottom" DisableAnimations="True" Hoverable="False" DataTooltip="{x:Null}"/>

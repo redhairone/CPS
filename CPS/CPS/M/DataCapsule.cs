@@ -176,34 +176,6 @@ namespace CPS.M
             }
 
             return new DataCapsule(result, this.SamplingFrequency);
-
-            //ChartValues<ObservablePoint> weaveValues = new ChartValues<ObservablePoint>();
-
-            //double frequency = (this.XValues.Max() + dataCapsule.XValues.Max()) / (this.XValues.Count + dataCapsule.XValues.Count - 1);
-            //int counter = 0;
-            //double[] time = SignalLogics.GetTimeValues(frequency, this.XValues.Max() + dataCapsule.XValues.Max());
-
-            //for(int i = 0; i < this.XValues.Count + dataCapsule.XValues.Count; i++)
-            //{
-            //    if (i >= time.Length)
-            //    {
-            //        break;
-            //    }
-
-            //    double sum = 0;
-            //    var kmin = i >= this.XValues.Count - 1 ? i - (this.XValues.Count - 1) : 0;
-            //    var kmax = i < dataCapsule.XValues.Count - 1 ? i : dataCapsule.XValues.Count - 1;
-
-            //    for(int j = kmin; j < kmax; j++)
-            //    {
-            //        sum += dataCapsule.YValues[j] * this.YValues[i - j];
-            //    }
-
-            //    weaveValues.Add(new ObservablePoint { X = time[counter], Y = sum });
-            //    counter++;
-            //}
-
-            //return new DataCapsule(weaveValues, dataCapsule.SamplingFrequency);
         }
 
         internal DataCapsule Weave(List<double> factors)
