@@ -9,20 +9,45 @@
         Title="Zad4Window" Height="450" Width="800">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="150"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
+        <Label Content="Czas algorytmu:"/>
+        <TextBox Grid.Column="0" Margin="10,27,10,362"
+                 Height="25" VerticalAlignment="Top"
+                 Text="{Binding Path=TimeMeasured, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+
         <Button 
-            Content="Go" 
-            Grid.Row="1" 
+            Content="Go Fourier" 
             VerticalAlignment="Bottom" 
-            Margin="5,5,5,10" 
+            Margin="5,0,5,40" 
             Height="25" 
-            Command="{Binding GenerateButtonPressed}"/>
+            Command="{Binding NormalFourierButtonPressed}"/>
+
+        <Button 
+            Content="Go Fast Fourier" 
+            VerticalAlignment="Bottom" 
+            Margin="5,0,5,10" 
+            Height="25" 
+            Command="{Binding FastFourierButtonPressed}"/>
+
+        <Button 
+            Content="Go Walsh" 
+            VerticalAlignment="Bottom" 
+            Margin="5,0,5,100" 
+            Height="25" 
+            Command="{Binding NormalWalshButtonPressed}"/>
+
+        <Button 
+            Content="Go Fast Walsh" 
+            VerticalAlignment="Bottom" 
+            Margin="5,0,5,70" 
+            Height="25" 
+            Command="{Binding FastWalshButtonPressed}"/>
 
         <TabControl Grid.Column="1">
             <TabItem Header="W1">

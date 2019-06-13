@@ -4,6 +4,7 @@ using LiveCharts.Defaults;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -38,10 +39,10 @@ namespace CPS.M
             else return new DataCapsule(signalBefore, samplesToMove);
         }
 
-        internal string CalculateDistance(List<double> yValues, double signalSpeed, int freq)
+        internal string CalculateDistance(List<Complex> yValues, double signalSpeed, int freq)
         {
-            List<double> right = yValues.Skip((yValues.Count - 1) / 2).ToList();
-            double a = right.Max();
+            List<Complex> right = yValues.Skip((yValues.Count - 1) / 2).ToList();
+            Complex a = right.Max();
             int max = right.FindIndex(c => c == right.Max());
             double b = (signalSpeed * ((double)max / freq) / 2);
             return b.ToString();

@@ -41,6 +41,9 @@ namespace CPS.Logics
                 {
                     result = (DataCapsule)formatter.Deserialize(stream);
                 }
+
+                result.XValues.RemoveAt(result.XValues.Count - 1);
+                result.YValues.RemoveAt(result.YValues.Count - 1);
                 return result;
             }
             else

@@ -75,6 +75,7 @@
     <Compile Include="Logics\SerializationLogics.cs" />
     <Compile Include="Logics\SignalLogics.cs" />
     <Compile Include="Logics\ResultLogics.cs" />
+    <Compile Include="Logics\TransformationsLogics.cs" />
     <Compile Include="M\ComplexCapsule.cs" />
     <Compile Include="M\DataCapsule.cs" />
     <Compile Include="M\Model.cs" />

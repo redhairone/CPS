@@ -4,6 +4,7 @@ using LiveCharts.Defaults;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 
 namespace CPS.M
 {
@@ -11,13 +12,13 @@ namespace CPS.M
     class DataCapsule
     {
         public List<double> XValues { get; set; }
-        public List<double> YValues { get; set; }
+        public List<Complex> YValues { get; set; }
         public int SamplingFrequency { get; set; }
 
         public DataCapsule(ChartValues<ObservablePoint> values, int frequency = 0)
         {
             XValues = new List<double>();
-            YValues = new List<double>();
+            YValues = new List<Complex>();
 
             SamplingFrequency = frequency;
 
@@ -31,15 +32,15 @@ namespace CPS.M
         public DataCapsule(DataCapsule dataCapsule)
         {
             XValues = new List<double>(dataCapsule.XValues);
-            YValues = new List<double>(dataCapsule.YValues);
+            YValues = new List<Complex>(dataCapsule.YValues);
 
             SamplingFrequency = dataCapsule.SamplingFrequency;
         }
 
         public DataCapsule(DataCapsule dataCapsule, int samplesToMove)
         {
-            List<double> pointsLeft = dataCapsule.YValues.Take(dataCapsule.YValues.Count - samplesToMove).ToList();
-            List<double> receivedSignal = dataCapsule.YValues.Skip(dataCapsule.YValues.Count - samplesToMove).ToList();
+            List<Complex> pointsLeft = dataCapsule.YValues.Take(dataCapsule.YValues.Count - samplesToMove).ToList();
+            List<Complex> receivedSignal = dataCapsule.YValues.Skip(dataCapsule.YValues.Count - samplesToMove).ToList();
             receivedSignal.AddRange(pointsLeft);
 
             XValues = new List<double>(dataCapsule.XValues);
@@ -48,7 +49,13 @@ namespace CPS.M
             SamplingFrequency = dataCapsule.SamplingFrequency;
         }
 
-        public DataCapsule(List<double> xValues, List<double> yValues, int frequency = 0)
+        internal void Take(int v)
+        {
+            XValues = XValues.Take(v).ToList();
+            YValues = YValues.Take(v).ToList();
+        }
+
+        public DataCapsule(List<double> xValues, List<Complex> yValues, int frequency = 0)
         {
             XValues = xValues;
             YValues = yValues;
@@ -56,7 +63,7 @@ namespace CPS.M
             SamplingFrequency = frequency;
         }
 
-        public DataCapsule(List<double> yValues, int frequency)
+        public DataCapsule(List<Complex> yValues, int frequency)
         {
             YValues = yValues;
             XValues = new List<double>();
@@ -69,7 +76,7 @@ namespace CPS.M
             SamplingFrequency = frequency;
         }
 
-        public DataCapsule(double end, List<double> yValues, int frequency = 0)
+        public DataCapsule(double end, List<Complex> yValues, int frequency = 0)
         {
             YValues = yValues;
             XValues = new List<double>();
@@ -92,7 +99,7 @@ namespace CPS.M
             {
                 for (int i = 0; i < XValues.Count; i++)
                 {
-                    values.Add(new ObservablePoint { X = XValues[i], Y = YValues[i] });
+                    values.Add(new ObservablePoint { X = XValues[i], Y = YValues[i].Real });
                 }
             }
             else throw new Exception("The amounts of X values is not equal the amount of Y values.");
@@ -158,12 +165,12 @@ namespace CPS.M
 
         internal DataCapsule Weave(DataCapsule dataCapsule)
         {
-            List<double> a = this.YValues, b = dataCapsule.YValues;
+            List<Complex> a = this.YValues, b = dataCapsule.YValues;
 
-            var result = new List<double>();
+            var result = new List<Complex>();
             for(int i = 0; i < a.Count + b.Count - 1; i++)
             {
-                double sum = 0;
+                Complex sum = Complex.Zero;
                 for(int j = 0; j<a.Count; j++)
                 {
                     if (i - j < 0 || i - j >= b.Count)
@@ -180,11 +187,11 @@ namespace CPS.M
 
         internal DataCapsule Weave(List<double> factors)
         {
-            List<double> result = new List<double>();
+            List<Complex> result = new List<Complex>();
 
             for(int i = 0; i < this.XValues.Count + factors.Count - 1; i++)
             {
-                double sum = 0;
+                Complex sum = Complex.Zero;
                 for(int j = 0; j < this.YValues.Count; j++)
                 {
                     if (i - j < 0 || i - j >= factors.Count) continue;
@@ -211,7 +218,7 @@ namespace CPS.M
 
             for(int i = 0; i < this.XValues.Count + dataCapsule.XValues.Count - 1; i++)
             {
-                double sum = 0;
+                Complex sum = Complex.Zero;
                 int k1min = i >= dataCapsule.XValues.Count - 1 ? i - (dataCapsule.XValues.Count - 1) : 0,
                     k1max = i < this.XValues.Count - 1 ? i : this.XValues.Count - 1,
                     k2min = i <= dataCapsule.XValues.Count - 1 ? dataCapsule.XValues.Count - 1 - i : 0;
@@ -220,7 +227,7 @@ namespace CPS.M
                 {
                     sum += this.YValues[k1] * dataCapsule.YValues[k2];
                 }
-                correlationValues.Add(new ObservablePoint { X = time[counter], Y = sum });
+                correlationValues.Add(new ObservablePoint { X = time[counter], Y = sum.Real });
                 counter++;
             }
 
